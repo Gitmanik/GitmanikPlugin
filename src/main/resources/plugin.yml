@@ -1,0 +1,16 @@
+name: GitmanikPlugin
+version: 1.0.0
+main: pl.gitmanik.GitmanikPlugin
+commands:
+  gtmlae:
+    permission: gitmanik.lae
+    description: List all entities
+    usage: /gtmlae <entity type>
+
+  p:
+    description: Stack all potions in inventory
+    usage: /p
+
+  gtmvoteskipnight:
+    usage: /gtmvoteskipnight
+    description: Helper command
