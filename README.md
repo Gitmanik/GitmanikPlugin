@@ -1,0 +1,2 @@
+# GitmanikPlugin
+Simple Minecraft plugin 
