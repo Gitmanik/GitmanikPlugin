@@ -18,6 +18,8 @@ public class StackPotions implements CommandExecutor
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
 	{
 		Player p = (Player) commandSender;
+		GitmanikPlugin.gitmanikplugin.AddEnchantWithLore(p.getInventory().getItemInMainHand(), GitmanikPlugin.tunneldigger);
+		GitmanikPlugin.gitmanikplugin.AddEnchantWithLore(p.getInventory().getItemInMainHand(), GitmanikPlugin.przychylnoscBogow);
 
 		List<ItemStack> allPotions = Arrays.stream(p.getInventory().getContents()).filter(xx -> (xx != null && (xx.getType() == Material.LINGERING_POTION || xx.getType() == Material.POTION || xx.getType() == Material.SPLASH_POTION))).collect(Collectors.toList());
 		ArrayList<ItemStack> newPotions = new ArrayList<>();

@@ -2,9 +2,11 @@ package pl.gitmanik;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,23 +20,58 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.bukkit.Bukkit.getServer;
+
 public class OreHandler implements Listener
 {
 	private Random rand = new Random();
 
-	public static final String NAZWA_ENCHANTU = ChatColor.ITALIC + "" + ChatColor.LIGHT_PURPLE + "Przychylność Bogów";
-
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Block block = event.getBlock();
+		BlockState state = block.getState();
+		Player player = event.getPlayer();
+		PlayerInventory inv = player.getInventory();
+		World world = player.getWorld();
+		ItemStack hand = inv.getItemInMainHand();
+
+		if (block.getType() == Material.DIAMOND_ORE)
+		{
+			handleDiamondBlock(player, block);
+			event.setCancelled(true);
+			block.setType(Material.AIR);
+			state.update();
+		}
+
+		if (hand.getEnchantments().getOrDefault(GitmanikPlugin.tunneldigger, 0) > 0)
+		{
+			Block b = block.getRelative(BlockFace.DOWN);
+			if (!b.getDrops(hand).isEmpty())
+			{
+				if (hand.getItemMeta() instanceof Damageable)
+				{
+					((Damageable) hand.getItemMeta()).damage(1);
+				}
+				if (b.getType() == Material.DIAMOND_ORE){
+					handleDiamondBlock(player, b);
+					b.setType(Material.AIR);
+				}
+
+				else
+					b.breakNaturally(hand);
+			}
+		}
+	}
+
+	private void handleDiamondBlock(Player player, Block block)
+	{
+
+		PlayerInventory inv = player.getInventory();
+		World world = player.getWorld();
 
 		if (block.getType() == Material.DIAMOND_ORE) {
-			BlockState state = block.getState();
-			Player player = event.getPlayer();
-			PlayerInventory inv = player.getInventory();
 
 			int fort =  inv.getItemInMainHand().getEnchantments().getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 0);
-			World world = player.getWorld();
 
 			if (player.getGameMode() != GameMode.CREATIVE) {
 
@@ -51,17 +88,13 @@ public class OreHandler implements Listener
 						player.sendMessage(ChatColor.GOLD + "Bogowie podarowali Ci swoje błogosławieństwo!");
 						ItemStack stack = new ItemStack(Material.EMERALD, 1);
 						ItemMeta meta = stack.getItemMeta();
-						meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 10, true);
+						meta.addEnchant(GitmanikPlugin.przychylnoscBogow, 1, true);
 						meta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
 						stack.setItemMeta(meta);
 						world.dropItemNaturally(block.getLocation(), stack);
 					}
 				}
 			}
-
-			event.setCancelled(true);
-			block.setType(Material.AIR);
-			state.update();
 		}
 	}
 }

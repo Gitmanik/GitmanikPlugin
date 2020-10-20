@@ -14,6 +14,9 @@ No additional libraries are required.
 - Fortune enchantment system change: added percentage to drop diamonds (70% + 10% for Fortune level)
 - Entity lister (/gtmlae)
 - Simple AFK Fishing Farm prevention and player logger
+- Enchantment lister (/le)
+- Custom enchantments
+
 
 
 ## Contributing

@@ -14,3 +14,7 @@ commands:
   gtmvoteskipnight:
     usage: /gtmvoteskipnight
     description: Helper command
+
+  le:
+    usage: /le
+    description: a wez spierdalaj
