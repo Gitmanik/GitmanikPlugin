@@ -1,14 +1,14 @@
-package pl.gitmanik;
+package pl.gitmanik.commands;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class StackPotions implements CommandExecutor
@@ -18,8 +18,8 @@ public class StackPotions implements CommandExecutor
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
 	{
 		Player p = (Player) commandSender;
-		GitmanikPlugin.gitmanikplugin.AddEnchantWithLore(p.getInventory().getItemInMainHand(), GitmanikPlugin.tunneldigger);
-		GitmanikPlugin.gitmanikplugin.AddEnchantWithLore(p.getInventory().getItemInMainHand(), GitmanikPlugin.przychylnoscBogow);
+		if (!p.hasPermission(("gitmanik.stackpotions")))
+			return false;
 
 		List<ItemStack> allPotions = Arrays.stream(p.getInventory().getContents()).filter(xx -> (xx != null && (xx.getType() == Material.LINGERING_POTION || xx.getType() == Material.POTION || xx.getType() == Material.SPLASH_POTION))).collect(Collectors.toList());
 		ArrayList<ItemStack> newPotions = new ArrayList<>();

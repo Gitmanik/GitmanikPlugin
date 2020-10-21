@@ -1,4 +1,4 @@
-package pl.gitmanik;
+package pl.gitmanik.commands;
 
 import javax.swing.text.StyledEditorKit.ForegroundAction;
 
@@ -22,8 +22,11 @@ public class ListAllEntities implements CommandExecutor {
             sender.sendMessage("This is a player only command!");
             return false;
         }
+
         Player player = (Player) sender;
         if (args.length == 0)
+            return false;
+        if (!player.hasPermission(("gitmanik.listentites")))
             return false;
 
         EntityType enttype = getEntityByName(args[0]);

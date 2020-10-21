@@ -1,13 +1,11 @@
-package pl.gitmanik;
+package pl.gitmanik.events;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,12 +14,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import pl.gitmanik.GitmanikPlugin;
 
-import java.util.Arrays;
 import java.util.Random;
-
-import static org.bukkit.Bukkit.getServer;
-
 public class OreHandler implements Listener
 {
 	private Random rand = new Random();
@@ -32,7 +27,6 @@ public class OreHandler implements Listener
 		BlockState state = block.getState();
 		Player player = event.getPlayer();
 		PlayerInventory inv = player.getInventory();
-		World world = player.getWorld();
 		ItemStack hand = inv.getItemInMainHand();
 
 		if (block.getType() == Material.DIAMOND_ORE)
@@ -43,23 +37,29 @@ public class OreHandler implements Listener
 			state.update();
 		}
 
-		if (hand.getEnchantments().getOrDefault(GitmanikPlugin.tunneldigger, 0) > 0)
+		int td = hand.getEnchantments().getOrDefault(GitmanikPlugin.tunneldigger, 0);
+		if (td == 1)
 		{
 			Block b = block.getRelative(BlockFace.DOWN);
-			if (!b.getDrops(hand).isEmpty())
-			{
-				if (hand.getItemMeta() instanceof Damageable)
-				{
-					((Damageable) hand.getItemMeta()).damage(1);
-				}
-				if (b.getType() == Material.DIAMOND_ORE){
-					handleDiamondBlock(player, b);
-					b.setType(Material.AIR);
-				}
+			Mine(player, hand, b);
+		}
+	}
 
-				else
-					b.breakNaturally(hand);
+	private void Mine(Player player, ItemStack hand, Block b)
+	{
+		if (!b.getDrops(hand).isEmpty())
+		{
+			if (hand.getItemMeta() instanceof Damageable)
+			{
+				((Damageable) hand.getItemMeta()).damage(1);
 			}
+			if (b.getType() == Material.DIAMOND_ORE){
+				handleDiamondBlock(player, b);
+				b.setType(Material.AIR);
+			}
+
+			else
+				b.breakNaturally(hand);
 		}
 	}
 

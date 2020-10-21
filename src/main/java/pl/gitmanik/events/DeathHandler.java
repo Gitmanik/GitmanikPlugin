@@ -1,4 +1,4 @@
-package pl.gitmanik;
+package pl.gitmanik.events;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import pl.gitmanik.GitmanikPlugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +25,6 @@ public class DeathHandler implements Listener
 		List<ItemStack> allPotions = Arrays.stream(p.getInventory().getContents()).filter(xx -> (xx != null && xx.getType() == Material.EMERALD)).collect(Collectors.toList());
 		for (ItemStack x : allPotions)
 		{
-//			(x.getI18NDisplayName() + "" + x.getEnchantmentLevel(GitmanikPlugin.przychylnoscBogow));
-
 			if (x.getEnchantmentLevel(GitmanikPlugin.przychylnoscBogow) == 1)
 			{
 				x.setAmount(x.getAmount() - 1);

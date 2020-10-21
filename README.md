@@ -10,12 +10,13 @@ No additional libraries are required.
 
 ## Plugin content
 
-- Potion stacker (/p)
 - Fortune enchantment system change: added percentage to drop diamonds (70% + 10% for Fortune level)
-- Entity lister (/gtmlae)
 - Simple AFK Fishing Farm prevention and player logger
-- Enchantment lister (/le)
 - Custom enchantments
+
+- Potion stacker (/p) (gitmanik.stackpotions)
+- Entity lister (/gtmlae) (gitmanik.listentities)
+- Enchantment lister (/le) (gitmanik.listenchants)
 
 
 

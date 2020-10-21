@@ -1,14 +1,24 @@
 name: GitmanikPlugin
-version: 1.0.0
+version: 2.0.0
 main: pl.gitmanik.GitmanikPlugin
+api-version: 1.16
 commands:
+
+  gtmench:
+    permission: gitmanik.admin.enchant
+    usage: /gtmench <type> <level>
+
+  gtmdur:
+    permission: gitmanik.admin.durability
+    usage: /gtmdur <amount>
   gtmlae:
-    permission: gitmanik.lae
+    permission: gitmanik.listentities
     description: List all entities
     usage: /gtmlae <entity type>
 
   p:
     description: Stack all potions in inventory
+    permission: gitmanik.stackpotions
     usage: /p
 
   gtmvoteskipnight:
@@ -16,5 +26,6 @@ commands:
     description: Helper command
 
   le:
+    permission: gitmanik.listenchants
     usage: /le
-    description: a wez spierdalaj
+    description: List all enchants of held item.
