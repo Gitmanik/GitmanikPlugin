@@ -115,6 +115,46 @@ public class GitmanikPlugin extends JavaPlugin {
 
             Bukkit.addRecipe(depo);
             GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
+            // -----------------------------------
+
+            //HELM_KOLCZUGA
+            ItemStack helmKolczuga = new ItemStack(Material.CHAINMAIL_HELMET);
+            ShapedRecipe helmKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "helm_kolczuga"), helmKolczuga);
+
+            helmKolczugaRecipe.shape("CCC", "C C", "   ");
+            helmKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+            Bukkit.addRecipe(helmKolczugaRecipe);
+            // ------------------------------------
+
+            //KLATA_KOLCZUGA
+            ItemStack klataKolczuga = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+            ShapedRecipe klataKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "klata_kolczuga"), klataKolczuga);
+
+            klataKolczugaRecipe.shape("C C", "CCC", "CCC");
+            klataKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+            Bukkit.addRecipe(klataKolczugaRecipe);
+            // ------------------------------------
+
+            //SPODNIE_KOLCZUGA
+            ItemStack spodnieKolczuga = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+            ShapedRecipe spodnieKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "spodnie_kolczuga"), spodnieKolczuga);
+
+            spodnieKolczugaRecipe.shape("CCC", "C C", "C C");
+            spodnieKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+            Bukkit.addRecipe(spodnieKolczugaRecipe);
+            // ------------------------------------
+
+            //BUTY_KOLCZUGA
+            ItemStack butyKolczuga = new ItemStack(Material.CHAINMAIL_BOOTS);
+            ShapedRecipe butyKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "buty_kolczuga"), butyKolczuga);
+
+            butyKolczugaRecipe.shape("   ", "C C", "C C");
+            butyKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+            Bukkit.addRecipe(butyKolczugaRecipe);
             // ------------------------------------
 
 

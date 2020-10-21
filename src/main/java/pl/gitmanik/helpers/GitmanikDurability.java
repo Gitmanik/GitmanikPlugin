@@ -63,7 +63,7 @@ public class GitmanikDurability
 		int dur = GetDurability(hand) + i;
 		if (dur <= 0)
 		{
-			player.sendMessage(ChatColor.RED + "Twój przedmiot " + hand.getI18NDisplayName() + " uległ zniszczeniu!");
+			player.sendMessage(ChatColor.RED + "Twój przedmiot " + hand.getI18NDisplayName() + " uległ zniszczeniu!"); //kurwa paweł to jest do poprawy, w sechand nie widac jaki przedmiot sie psuje, i trzeba kolor wstawić przedmiotu też w tym display name bo cale czertwone to dziwnie wygląda
 			player.getInventory().removeItemAnySlot(hand);
 			return;
 		}
