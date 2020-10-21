@@ -104,6 +104,18 @@ public class GitmanikPlugin extends JavaPlugin {
             depo.setIngredient('N', Material.NETHERRACK);
 
             Bukkit.addRecipe(depo);
+            // -----------------------------------
+
+            //HELM_KOLCZUGA
+            ItemStack helmKolczuga = new ItemStack(Material.CHAINMAIL_HELMET);
+            ShapedRecipe helmKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "helm_kolczuga"), helmKolczuga);
+
+            helmKolczugaRecipe.shape("CCC", "C C", "   ");
+            helmKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+            Bukkit.addRecipe(helmKolczugaRecipe);
+            // ------------------------------------
+
             //KLATA_KOLCZUGA
             ItemStack klataKolczuga = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
             ShapedRecipe klataKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "klata_kolczuga"), klataKolczuga);
