@@ -1,20 +1,13 @@
 name: GitmanikPlugin
 version: 2.0.0
 main: pl.gitmanik.GitmanikPlugin
+author: Gitmanik
 api-version: 1.16
 commands:
 
-  gtmench:
-    permission: gitmanik.admin.enchant
-    usage: /gtmench <type> <level>
-
-  gtmdur:
-    permission: gitmanik.admin.durability
-    usage: /gtmdur <amount>
-  gtmlae:
-    permission: gitmanik.listentities
-    description: List all entities
-    usage: /gtmlae <entity type>
+  gpadmin:
+    permission: gitmanik.admin
+    usage: /gpadmin [command] [args..]
 
   p:
     description: Stack all potions in inventory
@@ -23,9 +16,10 @@ commands:
 
   gtmvoteskipnight:
     usage: /gtmvoteskipnight
-    description: Helper command
+    description: Internal Helper command (Skip night feature)
 
-  le:
-    permission: gitmanik.listenchants
-    usage: /le
-    description: List all enchants of held item.
+  home:
+    usage: /home [name]
+
+  sethome:
+    usage: /sethome [name]

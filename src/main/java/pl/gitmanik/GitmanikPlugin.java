@@ -28,6 +28,8 @@ public class GitmanikPlugin extends JavaPlugin {
     public static FarmersHand rekaFarmera;
     public static DepoEnchant depoEnchant;
 
+    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt;
+
     public static Random r = new Random();
 
     public static NightSkipping nightskipping = new NightSkipping();
@@ -45,12 +47,18 @@ public class GitmanikPlugin extends JavaPlugin {
         EnchantmentHelper.registerEnchant(this, przychylnoscBogow);
         EnchantmentHelper.registerEnchant(this, depoEnchant);
 
-        this.getCommand("gtmlae").setExecutor(new ListAllEntities());
-        this.getCommand("p").setExecutor(new StackPotions());
-        this.getCommand("le").setExecutor(new ListEnchants());
-        this.getCommand("gtmdur").setExecutor(new DurabilityAdmin());
-        this.getCommand("gtmench").setExecutor(new Enchanter());
+        //Admin
+        this.getCommand("gpadmin").setExecutor(new GPAdmin());
 
+        //QoL
+        this.getCommand("p").setExecutor(new StackPotions());
+
+        //Home system
+        Homesystem homesystem = new Homesystem();
+        this.getCommand("home").setExecutor(homesystem);
+        this.getCommand("sethome").setExecutor(homesystem);
+
+        //Helper
         this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 
         try
@@ -70,6 +78,7 @@ public class GitmanikPlugin extends JavaPlugin {
             mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
 
             Bukkit.addRecipe(mruwiRecip);
+            GitmanikPlugin.mruwiKilof = mruwiKilof;
             // ------------------------------------
 
             //KWIAT
@@ -87,6 +96,7 @@ public class GitmanikPlugin extends JavaPlugin {
             orchidearecipe.setIngredient('H', Material.IRON_HOE);
 
             Bukkit.addRecipe(orchidearecipe);
+            GitmanikPlugin.magicznaOrchidea = magicznaOrchidea;
             // ------------------------------------
 
             //GRZYB
@@ -104,6 +114,7 @@ public class GitmanikPlugin extends JavaPlugin {
             depo.setIngredient('N', Material.NETHERRACK);
 
             Bukkit.addRecipe(depo);
+            GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
             // ------------------------------------
 
 
