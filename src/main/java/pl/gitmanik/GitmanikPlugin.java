@@ -33,135 +33,17 @@ public class GitmanikPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         gitmanikplugin = this;
-        mruwiaReka = new TunnelDigger(new NamespacedKey(this, "tunneldigger"));
-        przychylnoscBogow = new PrzychylnoscBogow(new NamespacedKey(this, "przychylnosc"));
-        rekaFarmera = new FarmersHand(new NamespacedKey(this, "rekafarmera"));
-        depoEnchant = new DepoEnchant(new NamespacedKey(this, "depoenchant"));
 
-        EnchantmentHelper.registerEnchant(this, rekaFarmera);
-        EnchantmentHelper.registerEnchant(this, mruwiaReka);
-        EnchantmentHelper.registerEnchant(this, przychylnoscBogow);
-        EnchantmentHelper.registerEnchant(this, depoEnchant);
+        RegisterCustomEnchants();
 
-        //Admin
-        this.getCommand("gpadmin").setExecutor(new GPAdmin());
-
-        //QoL
-        this.getCommand("p").setExecutor(new StackPotions());
-
-        //Home system
-        Homesystem homesystem = new Homesystem();
-        this.getCommand("home").setExecutor(homesystem);
-        this.getCommand("sethome").setExecutor(homesystem);
-
-        Teleportsystem  teleportsystem = new Teleportsystem();
-//        this.getCommand("tpa").setExecutor(teleportsystem);
-//        this.getCommand("tpaccept").setExecutor(teleportsystem);
-
-        //Helper
-        this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
-
+        RegisterCommands();
+        GenerateCustomItemStacks();
         try
         {
-            //MRUWI KILOF
-            ItemStack mruwiKilof = new ItemStack(Material.DIAMOND_PICKAXE);
-            ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
-            mruwiaMeta.setDisplayName("§dMruwi Kilof");
-            mruwiKilof.setItemMeta(mruwiaMeta);
-            EnchantmentHelper.AddEnchantWithLore(mruwiKilof, mruwiaReka, 1);
-            ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
-
-            mruwiRecip.shape("GRG", "IKI", "IRI");
-            mruwiRecip.setIngredient('G', Material.GOLD_BLOCK);
-            mruwiRecip.setIngredient('R', Material.REDSTONE_BLOCK);
-            mruwiRecip.setIngredient('I', Material.IRON_BLOCK);
-            mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
-
-            Bukkit.addRecipe(mruwiRecip);
-            GitmanikPlugin.mruwiKilof = mruwiKilof;
-            // ------------------------------------
-
-            //KWIAT
-            ItemStack magicznaOrchidea = new ItemStack(Material.BLUE_ORCHID);
-            ItemMeta orchideaMeta = magicznaOrchidea.getItemMeta();
-            orchideaMeta.setDisplayName("§dMagiczna Orchidea");
-            magicznaOrchidea.setItemMeta(orchideaMeta);
-            EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, rekaFarmera, 1);
-            GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
-            ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), magicznaOrchidea);
-
-            orchidearecipe.shape("LHL", "HOH", "LHL");
-            orchidearecipe.setIngredient('O', Material.BLUE_ORCHID);
-            orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
-            orchidearecipe.setIngredient('H', Material.IRON_HOE);
-
-            Bukkit.addRecipe(orchidearecipe);
-            GitmanikPlugin.magicznaOrchidea = magicznaOrchidea;
-            // ------------------------------------
-
-            //GRZYB
-            ItemStack mrocznyDepozyt = new ItemStack(Material.CRIMSON_FUNGUS);
-            ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
-            epozyt.setDisplayName("§dEnderowy Depozyt");
-            mrocznyDepozyt.setItemMeta(epozyt);
-            mrocznyDepozyt.addEnchantment(depoEnchant, 1);
-            GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
-            ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "mroczny_depozyt"), mrocznyDepozyt);
-
-            depo.shape("PPP", "NGN", "NNN");
-            depo.setIngredient('P', Material.ENDER_PEARL);
-            depo.setIngredient('G', Material.GLOWSTONE_DUST);
-            depo.setIngredient('N', Material.NETHERRACK);
-
-            Bukkit.addRecipe(depo);
-            GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
-            // -----------------------------------
-
-            //HELM_KOLCZUGA
-            ItemStack helmKolczuga = new ItemStack(Material.CHAINMAIL_HELMET);
-            ShapedRecipe helmKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "helm_kolczuga"), helmKolczuga);
-
-            helmKolczugaRecipe.shape("CCC", "C C", "   ");
-            helmKolczugaRecipe.setIngredient('C', Material.CHAIN);
-
-            Bukkit.addRecipe(helmKolczugaRecipe);
-            // ------------------------------------
-
-            //KLATA_KOLCZUGA
-            ItemStack klataKolczuga = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-            ShapedRecipe klataKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "klata_kolczuga"), klataKolczuga);
-
-            klataKolczugaRecipe.shape("C C", "CCC", "CCC");
-            klataKolczugaRecipe.setIngredient('C', Material.CHAIN);
-
-            Bukkit.addRecipe(klataKolczugaRecipe);
-            // ------------------------------------
-
-            //SPODNIE_KOLCZUGA
-            ItemStack spodnieKolczuga = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-            ShapedRecipe spodnieKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "spodnie_kolczuga"), spodnieKolczuga);
-
-            spodnieKolczugaRecipe.shape("CCC", "C C", "C C");
-            spodnieKolczugaRecipe.setIngredient('C', Material.CHAIN);
-
-            Bukkit.addRecipe(spodnieKolczugaRecipe);
-            // ------------------------------------
-
-            //BUTY_KOLCZUGA
-            ItemStack butyKolczuga = new ItemStack(Material.CHAINMAIL_BOOTS);
-            ShapedRecipe butyKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "buty_kolczuga"), butyKolczuga);
-
-            butyKolczugaRecipe.shape("   ", "C C", "C C");
-            butyKolczugaRecipe.setIngredient('C', Material.CHAIN);
-
-            Bukkit.addRecipe(butyKolczugaRecipe);
-            // ------------------------------------
-
-
+            GenerateCustomRecipes();
+            GenerateChainmailRecipes();
         }
-        catch (Exception e)
-        {
-        }
+        catch (Exception ignored){}
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, nightskipping, 0L, 60L);
 
@@ -174,6 +56,144 @@ public class GitmanikPlugin extends JavaPlugin {
         getLogger().info("Running.");
 
     }
+
+    private void RegisterCommands()
+    {
+        //Admin
+        this.getCommand("gpadmin").setExecutor(new GPAdmin());
+
+        //QoL
+        this.getCommand("p").setExecutor(new StackPotions());
+
+        //Home system
+        Homesystem homesystem = new Homesystem();
+        this.getCommand("dom").setExecutor(homesystem);
+        this.getCommand("ustawdom").setExecutor(homesystem);
+
+        Teleportsystem teleportsystem = new Teleportsystem();
+        this.getCommand("gtpa").setExecutor(teleportsystem);
+        this.getCommand("gtpaccept").setExecutor(teleportsystem);
+
+        //Helper
+        this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
+    }
+
+    private void RegisterCustomEnchants()
+    {
+        mruwiaReka = new TunnelDigger(new NamespacedKey(this, "tunneldigger"));
+        przychylnoscBogow = new PrzychylnoscBogow(new NamespacedKey(this, "przychylnosc"));
+        rekaFarmera = new FarmersHand(new NamespacedKey(this, "rekafarmera"));
+        depoEnchant = new DepoEnchant(new NamespacedKey(this, "depoenchant"));
+
+        EnchantmentHelper.registerEnchant(this, rekaFarmera);
+        EnchantmentHelper.registerEnchant(this, mruwiaReka);
+        EnchantmentHelper.registerEnchant(this, przychylnoscBogow);
+        EnchantmentHelper.registerEnchant(this, depoEnchant);
+    }
+
+    private void GenerateChainmailRecipes()
+    {
+        //HELM_KOLCZUGA
+        ItemStack helmKolczuga = new ItemStack(Material.CHAINMAIL_HELMET);
+        ShapedRecipe helmKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "helm_kolczuga"), helmKolczuga);
+
+        helmKolczugaRecipe.shape("CCC", "C C", "   ");
+        helmKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+        Bukkit.addRecipe(helmKolczugaRecipe);
+        // ------------------------------------
+
+        //KLATA_KOLCZUGA
+        ItemStack klataKolczuga = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+        ShapedRecipe klataKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "klata_kolczuga"), klataKolczuga);
+
+        klataKolczugaRecipe.shape("C C", "CCC", "CCC");
+        klataKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+        Bukkit.addRecipe(klataKolczugaRecipe);
+        // ------------------------------------
+
+        //SPODNIE_KOLCZUGA
+        ItemStack spodnieKolczuga = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+        ShapedRecipe spodnieKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "spodnie_kolczuga"), spodnieKolczuga);
+
+        spodnieKolczugaRecipe.shape("CCC", "C C", "C C");
+        spodnieKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+        Bukkit.addRecipe(spodnieKolczugaRecipe);
+        // ------------------------------------
+
+        //BUTY_KOLCZUGA
+        ItemStack butyKolczuga = new ItemStack(Material.CHAINMAIL_BOOTS);
+        ShapedRecipe butyKolczugaRecipe = new ShapedRecipe(new NamespacedKey(this, "buty_kolczuga"), butyKolczuga);
+
+        butyKolczugaRecipe.shape("   ", "C C", "C C");
+        butyKolczugaRecipe.setIngredient('C', Material.CHAIN);
+
+        Bukkit.addRecipe(butyKolczugaRecipe);
+        // ------------------------------------
+    }
+
+    private void GenerateCustomRecipes()
+    {
+        //MRUWI KILOF
+        ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
+        mruwiRecip.shape("GRG", "IKI", "IRI");
+        mruwiRecip.setIngredient('G', Material.GOLD_BLOCK);
+        mruwiRecip.setIngredient('R', Material.REDSTONE_BLOCK);
+        mruwiRecip.setIngredient('I', Material.IRON_BLOCK);
+        mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
+        Bukkit.addRecipe(mruwiRecip);
+
+        //MAGICZNA ORCHIDEA
+        ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), magicznaOrchidea);
+        orchidearecipe.shape("LHL", "HOH", "LHL");
+        orchidearecipe.setIngredient('O', Material.BLUE_ORCHID);
+        orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
+        orchidearecipe.setIngredient('H', Material.IRON_HOE);
+        Bukkit.addRecipe(orchidearecipe);
+
+        //ENDEROWY DEPOZYT
+        ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "mroczny_depozyt"), enderowyDepozyt);
+        depo.shape("PPP", "NGN", "NNN");
+        depo.setIngredient('P', Material.ENDER_PEARL);
+        depo.setIngredient('G', Material.GLOWSTONE_DUST);
+        depo.setIngredient('N', Material.NETHERRACK);
+        Bukkit.addRecipe(depo);
+    }
+
+    private void GenerateCustomItemStacks()
+    {
+        //-------------------------------
+        ItemStack mruwiKilof = new ItemStack(Material.DIAMOND_PICKAXE);
+        ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
+        mruwiaMeta.setDisplayName("§dMruwi Kilof");
+        mruwiKilof.setItemMeta(mruwiaMeta);
+        EnchantmentHelper.AddEnchantWithLore(mruwiKilof, mruwiaReka, 1);
+        GitmanikPlugin.mruwiKilof = mruwiKilof;
+        //-------------------------------------------
+
+        //KWIAT
+        ItemStack magicznaOrchidea = new ItemStack(Material.BLUE_ORCHID);
+        ItemMeta orchideaMeta = magicznaOrchidea.getItemMeta();
+        orchideaMeta.setDisplayName("§dMagiczna Orchidea");
+        magicznaOrchidea.setItemMeta(orchideaMeta);
+        EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, rekaFarmera, 1);
+        GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
+        GitmanikPlugin.magicznaOrchidea = magicznaOrchidea;
+        // ------------------------------------
+
+        //GRZYB
+        ItemStack mrocznyDepozyt = new ItemStack(Material.CRIMSON_FUNGUS);
+        ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
+        epozyt.setDisplayName("§dEnderowy Depozyt");
+        mrocznyDepozyt.setItemMeta(epozyt);
+        mrocznyDepozyt.addEnchantment(depoEnchant, 1);
+        GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
+        GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
+        // -----------------------------------
+    }
+
     @Override
     public void onDisable() {
         getLogger().info("Bye.");
