@@ -23,3 +23,5 @@ commands:
 
   sethome:
     usage: /sethome [name]
+
+

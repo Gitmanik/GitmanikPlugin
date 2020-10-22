@@ -37,7 +37,7 @@ public class OreHandler implements Listener
 			state.update();
 		}
 
-		int td = hand.getEnchantments().getOrDefault(GitmanikPlugin.tunneldigger, 0);
+		int td = hand.getEnchantments().getOrDefault(GitmanikPlugin.mruwiaReka, 0);
 		if (td == 1)
 		{
 			Block b = block.getRelative(BlockFace.DOWN);

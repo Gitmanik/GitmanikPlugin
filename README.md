@@ -11,13 +11,12 @@ No additional libraries are required.
 ## Plugin content
 
 - Fortune enchantment system change: added percentage to drop diamonds (70% + 10% for Fortune level)
-- Simple AFK Fishing Farm prevention and player logger
 - Custom enchantments
+- Durability system
 
 - Potion stacker (/p) (gitmanik.stackpotions)
-- Entity lister (/gtmlae) (gitmanik.listentities)
-- Enchantment lister (/le) (gitmanik.listenchants)
-
+- Admin command (/gpadmin) (gitmanik.admin)
+- Home system (/home /sethome)
 
 
 ## Contributing

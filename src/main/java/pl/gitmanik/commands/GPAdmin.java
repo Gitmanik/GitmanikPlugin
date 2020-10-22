@@ -93,7 +93,7 @@ public class GPAdmin implements CommandExecutor
 				e = GitmanikPlugin.rekaFarmera;
 				break;
 			case "tunneldigger":
-				e = GitmanikPlugin.tunneldigger;
+				e = GitmanikPlugin.mruwiaReka;
 				break;
 			case "przychylnosc":
 				e = GitmanikPlugin.przychylnoscBogow;

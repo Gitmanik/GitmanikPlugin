@@ -7,43 +7,39 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.gitmanik.commands.*;
+import pl.gitmanik.commands.GPAdmin;
+import pl.gitmanik.commands.Homesystem;
+import pl.gitmanik.commands.StackPotions;
+import pl.gitmanik.commands.Teleportsystem;
 import pl.gitmanik.enchants.*;
-import pl.gitmanik.events.DeathHandler;
-import pl.gitmanik.events.DepositHandler;
-import pl.gitmanik.events.OreHandler;
-import pl.gitmanik.events.PlantHandler;
+import pl.gitmanik.events.*;
 import pl.gitmanik.helpers.GitmanikDurability;
 import pl.gitmanik.nightskip.NightSkipping;
 import pl.gitmanik.nightskip.VoteSkipNightHandler;
-
-import java.util.Random;
 
 public class GitmanikPlugin extends JavaPlugin {
 
     public static GitmanikPlugin gitmanikplugin;
 
-    public static TunnelDigger tunneldigger;
+    public static TunnelDigger mruwiaReka;
     public static PrzychylnoscBogow przychylnoscBogow;
     public static FarmersHand rekaFarmera;
     public static DepoEnchant depoEnchant;
 
     public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt;
 
-    public static Random r = new Random();
-
     public static NightSkipping nightskipping = new NightSkipping();
 
     @Override
     public void onEnable() {
         gitmanikplugin = this;
-        tunneldigger = new TunnelDigger(new NamespacedKey(this, "tunneldigger"));
+        mruwiaReka = new TunnelDigger(new NamespacedKey(this, "tunneldigger"));
         przychylnoscBogow = new PrzychylnoscBogow(new NamespacedKey(this, "przychylnosc"));
         rekaFarmera = new FarmersHand(new NamespacedKey(this, "rekafarmera"));
         depoEnchant = new DepoEnchant(new NamespacedKey(this, "depoenchant"));
 
         EnchantmentHelper.registerEnchant(this, rekaFarmera);
-        EnchantmentHelper.registerEnchant(this, tunneldigger);
+        EnchantmentHelper.registerEnchant(this, mruwiaReka);
         EnchantmentHelper.registerEnchant(this, przychylnoscBogow);
         EnchantmentHelper.registerEnchant(this, depoEnchant);
 
@@ -58,6 +54,10 @@ public class GitmanikPlugin extends JavaPlugin {
         this.getCommand("home").setExecutor(homesystem);
         this.getCommand("sethome").setExecutor(homesystem);
 
+        Teleportsystem  teleportsystem = new Teleportsystem();
+//        this.getCommand("tpa").setExecutor(teleportsystem);
+//        this.getCommand("tpaccept").setExecutor(teleportsystem);
+
         //Helper
         this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 
@@ -68,7 +68,7 @@ public class GitmanikPlugin extends JavaPlugin {
             ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
             mruwiaMeta.setDisplayName("§dMruwi Kilof");
             mruwiKilof.setItemMeta(mruwiaMeta);
-            EnchantmentHelper.AddEnchantWithLore(mruwiKilof, tunneldigger, 1);
+            EnchantmentHelper.AddEnchantWithLore(mruwiKilof, mruwiaReka, 1);
             ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
 
             mruwiRecip.shape("GRG", "IKI", "IRI");
@@ -169,6 +169,7 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DeathHandler(), this);
         Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
 
         getLogger().info("Running.");
 
