@@ -55,7 +55,8 @@ public class PlantHandler implements Listener
 							else
 							{
 								hand.setAmount(hand.getAmount() -1);
-								GitmanikDurability.EditDurability(player, sechand, -1);
+								if (!GitmanikDurability.EditDurability(player, sechand, -1))
+									return;
 							}
 						}
 					}

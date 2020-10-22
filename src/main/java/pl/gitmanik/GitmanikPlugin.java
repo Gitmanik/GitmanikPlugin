@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.StonecuttingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.gitmanik.commands.GPAdmin;
@@ -60,6 +61,7 @@ public class GitmanikPlugin extends JavaPlugin {
     private void RegisterCommands()
     {
         //Admin
+
         this.getCommand("gpadmin").setExecutor(new GPAdmin());
 
         //QoL
@@ -160,6 +162,9 @@ public class GitmanikPlugin extends JavaPlugin {
         depo.setIngredient('G', Material.GLOWSTONE_DUST);
         depo.setIngredient('N', Material.NETHERRACK);
         Bukkit.addRecipe(depo);
+
+        StonecuttingRecipe cobbleToGravel = new StonecuttingRecipe(new NamespacedKey(this, "cobble_gravel"), new ItemStack(Material.GRAVEL, 2), Material.COBBLESTONE);
+        Bukkit.addRecipe(cobbleToGravel);
     }
 
     private void GenerateCustomItemStacks()

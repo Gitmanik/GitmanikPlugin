@@ -16,6 +16,7 @@ public class Teleportsystem implements CommandExecutor
 {
 	public static final int KOSZT = 5;
 	public HashMap<Player, Player> tpa = new HashMap<>();
+	public HashMap<Player, Integer> tasks = new HashMap<>();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -53,11 +54,20 @@ public class Teleportsystem implements CommandExecutor
 
 			sender.sendMessage(ChatColor.WHITE + "Wysłano prośbę do gracza " + ChatColor.GOLD + target.getDisplayName());
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gitmanikplugin, () ->
+			if (tasks.containsKey(player))
+			{
+				Bukkit.getScheduler().cancelTask(tasks.get(player));
+				tasks.remove(player);
+			}
+
+			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gitmanikplugin, () ->
 			{
 				sender.sendMessage("Prośba przedawniona.");
 				tpa.remove(target);
-			}, 20*30);
+				tasks.remove(player);
+			}, 20*15);
+
+			tasks.put(player,x);
 
 			return true;
 
@@ -85,17 +95,17 @@ public class Teleportsystem implements CommandExecutor
 			}
 			base.teleport(player);
 			base.getInventory().removeItem(new ItemStack(Material.DIAMOND, KOSZT));
-			player.sendMessage(ChatColor.WHITE + "Przeteleportowano " + ChatColor.GOLD + base.getDisplayName() +  " do Ciebie.");
+			player.sendMessage(ChatColor.WHITE + "Przeteleportowano " + ChatColor.GOLD + base.getDisplayName() + ChatColor.WHITE + " do Ciebie.");
 
+			if (tasks.containsKey(base))
+			{
+				Bukkit.getScheduler().cancelTask(tasks.get(base));
+				tasks.remove(base);
+			}
 			tpa.remove(player);
 			return true;
 		}
 
 		return false;
-	}
-
-	private void CancelTPA(Player player)
-	{
-
 	}
 }

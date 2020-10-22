@@ -58,15 +58,16 @@ public class GitmanikDurability
 		stack.setItemMeta(im);
 	}
 
-	public static void EditDurability(Player player, ItemStack hand, int i)
+	public static boolean EditDurability(Player player, ItemStack hand, int i)
 	{
 		int dur = GetDurability(hand) + i;
 		if (dur <= 0)
 		{
-			player.sendMessage(ChatColor.RED + "Twój przedmiot " + hand.getI18NDisplayName() + " uległ zniszczeniu!"); //kurwa paweł to jest do poprawy, w sechand nie widac jaki przedmiot sie psuje, i trzeba kolor wstawić przedmiotu też w tym display name bo cale czertwone to dziwnie wygląda
+			player.sendMessage(ChatColor.RED + "Twój przedmiot " + hand.getItemMeta().getDisplayName() + ChatColor.RED +" uległ zniszczeniu!"); //kurwa paweł to jest do poprawy, w sechand nie widac jaki przedmiot sie psuje, i trzeba kolor wstawić przedmiotu też w tym display name bo cale czertwone to dziwnie wygląda
 			player.getInventory().removeItemAnySlot(hand);
-			return;
+			return false;
 		}
 		SetDurability(hand, dur);
+		return true;
 	}
 }
