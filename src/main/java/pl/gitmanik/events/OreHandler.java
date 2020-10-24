@@ -47,17 +47,19 @@ public class OreHandler implements Listener
 
 	private void Mine(Player player, ItemStack hand, Block b)
 	{
+		if (b.getType() == Material.OBSIDIAN)
+			return;
+
 		if (!b.getDrops(hand).isEmpty())
 		{
 			if (hand.getItemMeta() instanceof Damageable)
 			{
 				((Damageable) hand.getItemMeta()).damage(1);
 			}
-			if (b.getType() == Material.DIAMOND_ORE){
+			else if (b.getType() == Material.DIAMOND_ORE){
 				handleDiamondBlock(player, b);
 				b.setType(Material.AIR);
 			}
-
 			else
 				b.breakNaturally(hand);
 		}

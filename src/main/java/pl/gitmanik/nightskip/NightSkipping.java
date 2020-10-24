@@ -30,7 +30,7 @@ public class NightSkipping implements Runnable
 				if (!asked.get(w))
 				{
 					asked.put(w, true);
-					if (Math.random() < 0.3)
+					if (Math.random() < 0.7)
 					{
 						nightSkipCount.put(w, new HashSet<>());
 
