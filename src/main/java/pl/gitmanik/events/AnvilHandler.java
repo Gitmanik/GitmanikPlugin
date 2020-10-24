@@ -25,13 +25,12 @@ public class AnvilHandler implements Listener
 				meta.setDisplayName("§d" + ai.getRenameText());
 				if (secondItem != null)
 				{
-					//TODO
 					if (secondItem.getType() == Material.DIAMOND)
 					{
 						if (meta instanceof Damageable){
 							Damageable durability = (Damageable) meta;
 							if (durability.hasDamage()){
-								durability.setDamage(durability.getDamage() * 4/3);
+								durability.setDamage(Math.min(Material.DIAMOND_PICKAXE.getMaxDurability(), durability.getDamage() - Material.DIAMOND_PICKAXE.getMaxDurability() /3));
 							}
 						}
 					}
@@ -41,9 +40,9 @@ public class AnvilHandler implements Listener
 							if (durability.hasDamage()){
 								durability.setDamage(0);
 							}
-						}												//nwm czy to tak mialo byc ale chujjj!!!!
+						}
 					}
-					if (secondItem.getItemMeta() instanceof EnchantmentStorageMeta)
+					else if (secondItem.getItemMeta() instanceof EnchantmentStorageMeta)
 					{
 						((EnchantmentStorageMeta) secondItem.getItemMeta()).getStoredEnchants().forEach((key, value) ->
 								meta.addEnchant(key, value, false));
