@@ -22,7 +22,7 @@ public class CraftingHandler implements Listener
 	public void onCraft(PrepareItemCraftEvent event)
 	{
 
-		if (event.getInventory().getResult().equals(GitmanikPlugin.mruwiKilof))
+		if (event.getInventory().getResult() != null && event.getInventory().getResult().equals(GitmanikPlugin.mruwiKilof))
 		{
 			ItemStack i = event.getInventory().getItem(5);
 			if (i != null && i.getType() == Material.DIAMOND_PICKAXE)
