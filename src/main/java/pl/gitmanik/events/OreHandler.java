@@ -47,9 +47,9 @@ public class OreHandler implements Listener
 
 	private void Mine(Player player, ItemStack hand, Block b)
 	{
-		if (b.getType() == Material.OBSIDIAN)
+		if (b.getType() == Material.OBSIDIAN) {
 			return;
-
+		}
 		if (!b.getDrops(hand).isEmpty())
 		{
 			if (hand.getItemMeta() instanceof Damageable)
