@@ -36,7 +36,7 @@ public class Homesystem implements CommandExecutor
 			{
 				if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
 				{
-					player.sendMessage(ChatColor.RED + "Nie stac cie na /home! Koszt: " + KOSZT + " diament");
+					player.sendMessage(ChatColor.RED + "Nie stac cie na /dom! Koszt: " + KOSZT + " diament");
 					return true;
 				}
 
