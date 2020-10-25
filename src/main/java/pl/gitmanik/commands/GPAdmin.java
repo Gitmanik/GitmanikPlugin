@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
+import pl.gitmanik.events.ChatHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 
 public class GPAdmin implements CommandExecutor
@@ -18,6 +19,9 @@ public class GPAdmin implements CommandExecutor
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
+
+		//TODO NAPRAWIC LISTENTITY
+		//TODO DODAC SZUKANIE NAJBLISZEGO(YCH) ENTITY
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("This is a player only command!");
 			return false;
@@ -29,6 +33,8 @@ public class GPAdmin implements CommandExecutor
 
 		switch (args[0].toLowerCase())
 		{
+			case "spy":
+				return ToggleSpy(player, args);
 			case "durability":
 				return DurabilityHandler(player, args);
 			case "listentity":
@@ -41,9 +47,19 @@ public class GPAdmin implements CommandExecutor
 				return GiveItem(player,args);
 			default:
 				player.sendMessage("Unknown GPAdmin command.");
-				player.sendMessage("Options: durability listentity enchant listenchants give");
+				player.sendMessage("Options: spy durability listentity enchant listenchants give");
 				return false;
 		}
+	}
+
+	private boolean ToggleSpy(Player player, String[] args)
+	{
+		boolean n = !ChatHandler.spy.getOrDefault(player, false);
+		ChatHandler.spy.put(player, n);
+
+		player.sendMessage("New Spy state: " + n);
+
+		return true;
 	}
 
 	private boolean GiveItem(Player player, String[] args)

@@ -27,13 +27,37 @@ public class GitmanikPlugin extends JavaPlugin {
     public static FarmersHand rekaFarmera;
     public static DepoEnchant depoEnchant;
 
-    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt;
+    public static ChatHandler chathandler;
+
+    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt, skompresowanyCobble, skompresowanyPiasek, skompresowanyDirt;
+
+//    public static DynmapAPI dynmap;
+
+
 
     public static NightSkipping nightskipping = new NightSkipping();
 
     @Override
     public void onEnable() {
         gitmanikplugin = this;
+
+//        dynmap = (DynmapAPI) Bukkit.getServer().getPluginManager().getPlugin("dynmap");
+//
+//        if (dynmap != null)
+//        {
+//            Bukkit.getPluginManager().registerEvents(new ChatHandler(), this);
+//            dynmap.getMarkerAPI().getMarkerSets().forEach((x) ->
+//            {
+//                x.getAreaMarkers().forEach((y) ->
+//                {
+//                    y.get
+//                });
+//            });
+//        }
+//        else
+//        {
+//            getLogger().info("Dynmap not found - chat range will be disabled");
+//        }
 
         RegisterCustomEnchants();
 
@@ -53,6 +77,10 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
+
+        chathandler = new ChatHandler(this);
+
+        Bukkit.getPluginManager().registerEvents(chathandler, this);
 
         getLogger().info("Running.");
 
@@ -78,6 +106,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
         //Helper
         this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
+
     }
 
     private void RegisterCustomEnchants()
@@ -134,6 +163,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
         Bukkit.addRecipe(butyKolczugaRecipe);
         // ------------------------------------
+
     }
 
     private void GenerateCustomRecipes()
@@ -163,8 +193,12 @@ public class GitmanikPlugin extends JavaPlugin {
         depo.setIngredient('N', Material.NETHERRACK);
         Bukkit.addRecipe(depo);
 
+
+
         StonecuttingRecipe cobbleToGravel = new StonecuttingRecipe(new NamespacedKey(this, "cobble_gravel"), new ItemStack(Material.GRAVEL, 2), Material.COBBLESTONE);
         Bukkit.addRecipe(cobbleToGravel);
+
+
     }
 
     private void GenerateCustomItemStacks()
@@ -197,6 +231,34 @@ public class GitmanikPlugin extends JavaPlugin {
         GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
         GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
         // -----------------------------------
+
+//        //SKOMPRESOWANY COBBLE
+//        ItemStack skompresowanyCobble = new ItemStack(Material.COBBLESTONE);
+//        ItemMeta skompresowanyC = skompresowanyCobble.getItemMeta();
+//        skompresowanyC.setDisplayName("§dSkompresowany Cobble");
+//        skompresowanyCobble.setItemMeta(skompresowanyC);
+//        skompresowanyCobble.addEnchantment(Enchantment.DURABILITY, 10);
+//        GitmanikPlugin.skompresowanyCobble = skompresowanyCobble;
+//        // -----------------------------------
+//
+//        //SKOMPRESOWANY COBBLE
+//        ItemStack skompresowanyDirt = new ItemStack(Material.DIRT);
+//        ItemMeta skompresowanyD = skompresowanyDirt.getItemMeta();
+//        skompresowanyD.setDisplayName("§dSkompresowany Dirt");
+//        skompresowanyDirt.setItemMeta(skompresowanyD);
+//        skompresowanyDirt.addEnchantment(Enchantment.DURABILITY, 10);
+//        GitmanikPlugin.skompresowanyDirt = skompresowanyDirt;
+//        // -----------------------------------
+//
+//        //SKOMPRESOWANY PIASEK
+//        ItemStack skompresowanyPiasek = new ItemStack(Material.SAND);
+//        ItemMeta skompresowanyP = skompresowanyPiasek.getItemMeta();
+//        skompresowanyP.setDisplayName("§dSkompresowany Piasek");
+//        skompresowanyPiasek.setItemMeta(skompresowanyP);
+//        skompresowanyPiasek.addEnchantment(Enchantment.DURABILITY, 10);
+//        GitmanikPlugin.skompresowanyPiasek = skompresowanyPiasek;
+//        // -----------------------------------
+
     }
 
     @Override
