@@ -42,7 +42,7 @@ public class AnvilHandler implements Listener
 							}
 						}
 					}
-					else if (secondItem.getItemMeta() instanceof EnchantmentStorageMeta)
+					if (secondItem.getItemMeta() instanceof EnchantmentStorageMeta)
 					{
 						((EnchantmentStorageMeta) secondItem.getItemMeta()).getStoredEnchants().forEach((key, value) ->
 								meta.addEnchant(key, value, false));
