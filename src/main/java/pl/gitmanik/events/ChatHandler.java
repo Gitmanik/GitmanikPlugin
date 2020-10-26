@@ -43,7 +43,8 @@ public class ChatHandler implements Listener
 		else
 		{
 			event.setCancelled(true);
-			String target = ChatColor.BLUE + "[LOKALNY%s] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message;
+			String target = ChatColor.BLUE + "[LOKALNY";
+			String target2 = ChatColor.BLUE + "] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message;
 			Location baseL = sender.getLocation();
 			for (Player player : players)
 			{
@@ -52,9 +53,9 @@ public class ChatHandler implements Listener
 				if (distance < RADIUS || spy.getOrDefault(player, false))
 				{
 					if (player != sender)
-						player.sendMessage(String.format(target, ", " + (int) Math.ceil(distance) +" kratek"));
+						player.sendMessage(target + " " + ChatColor.ITALIC + (int) Math.ceil(distance) + " kratek"+ target2);
 					else
-						player.sendMessage(String.format(target, ""));
+						player.sendMessage(target + target2);
 				}
 			}
 		}
