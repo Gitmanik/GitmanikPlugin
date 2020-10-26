@@ -183,7 +183,7 @@ public class GitmanikPlugin extends JavaPlugin {
         ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
         mruwiRecip.shape("LLL", "RKR", "RRR");
         mruwiRecip.setIngredient('L', Material.LAPIS_BLOCK);
-        mruwiRecip.setIngredient('R', Material.REDSTONE_BLOCK);
+        mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
         mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
         Bukkit.addRecipe(mruwiRecip);
 
