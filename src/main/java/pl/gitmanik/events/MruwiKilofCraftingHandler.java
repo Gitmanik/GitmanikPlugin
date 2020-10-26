@@ -15,6 +15,7 @@ public class MruwiKilofCraftingHandler implements Listener {
         CraftingInventory inv = event.getInventory();
 
         if(inv.getResult() != null && inv.getResult().equals(GitmanikPlugin.mruwiKilof)){
+
             for(ItemStack item : inv.getMatrix()){
                 if (item != null && item.getType() == Material.LAPIS_BLOCK && !item.equals(GitmanikPlugin.mruwiKlejnot)){
                     inv.setResult(null);

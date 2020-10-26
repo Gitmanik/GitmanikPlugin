@@ -38,7 +38,7 @@ public class ChatHandler implements Listener
 		{
 			String target = ChatColor.GREEN + "[GLOBALNY] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message.substring(2);
 			event.setMessage(message.substring(2));
-			event.setFormat(target);
+			event.setFormat(target.replace("%", "%%"));
 		}
 		else
 		{

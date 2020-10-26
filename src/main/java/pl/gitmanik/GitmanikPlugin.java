@@ -81,10 +81,9 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(this), this);
         Bukkit.getPluginManager().registerEvents(new MruwiKilofCraftingHandler(), this);
 
-
         chathandler = new ChatHandler(this);
-
         Bukkit.getPluginManager().registerEvents(chathandler, this);
+
 
         getLogger().info("Running.");
 
