@@ -3,6 +3,7 @@ package pl.gitmanik;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
@@ -29,7 +30,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
     public static ChatHandler chathandler;
 
-    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt, skompresowanyCobble, skompresowanyPiasek, skompresowanyDirt;
+    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt, mruwiKlejnot, skompresowanyCobble, skompresowanyPiasek, skompresowanyDirt;
 
 //    public static DynmapAPI dynmap;
 
@@ -78,6 +79,7 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(this), this);
+        Bukkit.getPluginManager().registerEvents(new MruwiKilofCraftingHandler(), this);
 
 
         chathandler = new ChatHandler(this);
@@ -170,12 +172,18 @@ public class GitmanikPlugin extends JavaPlugin {
 
     private void GenerateCustomRecipes()
     {
+        //MRUWI KLEJNOT
+        ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), mruwiKlejnot);
+        mruwiKlejnotRecipe.shape("LLL", "LEL", "LLL");
+        mruwiKlejnotRecipe.setIngredient('L', Material.LAPIS_BLOCK);
+        mruwiKlejnotRecipe.setIngredient('E', Material.ENDER_EYE);
+        Bukkit.addRecipe(mruwiKlejnotRecipe);
+
         //MRUWI KILOF
         ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
-        mruwiRecip.shape("GRG", "IKI", "IRI");
-        mruwiRecip.setIngredient('G', Material.GOLD_BLOCK);
+        mruwiRecip.shape("LLL", "RKR", "RRR");
+        mruwiRecip.setIngredient('L', Material.LAPIS_BLOCK);
         mruwiRecip.setIngredient('R', Material.REDSTONE_BLOCK);
-        mruwiRecip.setIngredient('I', Material.IRON_BLOCK);
         mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
         Bukkit.addRecipe(mruwiRecip);
 
@@ -205,6 +213,16 @@ public class GitmanikPlugin extends JavaPlugin {
 
     private void GenerateCustomItemStacks()
     {
+
+        //MRUWI KLEJNOT
+        ItemStack mruwiKlejnot = new ItemStack(Material.LAPIS_BLOCK);
+        ItemMeta mruwiKlejnotMeta = mruwiKlejnot.getItemMeta();
+        mruwiKlejnotMeta.setDisplayName("§6Mruwi Klejnot");
+        mruwiKlejnot.setItemMeta(mruwiKlejnotMeta);
+        mruwiKlejnot.addUnsafeEnchantment(Enchantment.LUCK, 10);
+        GitmanikPlugin.mruwiKlejnot = mruwiKlejnot;
+        //------------------------------------
+
         //-------------------------------
         ItemStack mruwiKilof = new ItemStack(Material.DIAMOND_PICKAXE);
         ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();

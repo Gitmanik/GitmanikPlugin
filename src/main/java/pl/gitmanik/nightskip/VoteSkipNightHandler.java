@@ -39,6 +39,8 @@ public class VoteSkipNightHandler implements CommandExecutor
 			for (Player p : world.getPlayers())
 			{
 				p.sendMessage(ChatColor.AQUA + player.getName() + ChatColor.BLUE + " zagłosował* za pominięciem nocy [" + players + "/" + neededplayers + "]");
+				//TODO
+				//dodaj ze po tym zmienna sie dodaje i huj zeby sie nie dalo kiklukrotnie spamic tym chatu xd
 			}
 			if (players >= neededplayers)
 			{
