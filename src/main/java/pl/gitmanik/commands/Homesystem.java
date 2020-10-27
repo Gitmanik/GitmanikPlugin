@@ -54,7 +54,7 @@ public class Homesystem implements CommandExecutor
 				player.sendMessage(ChatColor.GOLD + "Teleportowano do domu!");
 			} else
 			{
-				player.sendMessage(ChatColor.GOLD + "Najpierw ustaw dom! /sethome");
+				player.sendMessage(ChatColor.GOLD + "Najpierw ustaw dom! /ustawdom");
 			}
 		}
 		return true;

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import pl.gitmanik.GitmanikPlugin;
+import pl.gitmanik.enchants.EnchantmentHelper;
 
 public class AnvilHandler implements Listener
 {
@@ -19,7 +19,7 @@ public class AnvilHandler implements Listener
 		ItemStack firstItem = ai.getFirstItem();
 		ItemStack secondItem = ai.getSecondItem();
 		if(firstItem != null) {
-			if(firstItem.containsEnchantment(GitmanikPlugin.mruwiaReka)) {
+			if(firstItem.containsEnchantment(EnchantmentHelper.GetEnchantment("tunneldigger"))) {
 				ItemStack item = firstItem.clone();
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName("§d" + ai.getRenameText());

@@ -5,19 +5,21 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import pl.gitmanik.GitmanikPlugin;
 
-public class TunnelDigger extends Enchantment
+public class GitmanikEnchantment extends Enchantment
 {
-	public static final String NAZWA_ENCHANTU = ChatColor.ITALIC + "" + ChatColor.GOLD + "Mruwia Reka";
-	public TunnelDigger(NamespacedKey key)
+	private String name;
+	public GitmanikEnchantment(String key, String name)
 	{
-		super(key);
+		super(new NamespacedKey(GitmanikPlugin.gitmanikplugin, key));
+		this.name = name;
 	}
 
 	@Override
 	public String getName()
 	{
-		return NAZWA_ENCHANTU;
+		return ChatColor.ITALIC + name;
 	}
 
 	@Override

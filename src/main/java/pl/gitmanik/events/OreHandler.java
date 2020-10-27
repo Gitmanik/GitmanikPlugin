@@ -14,7 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import pl.gitmanik.GitmanikPlugin;
+import pl.gitmanik.enchants.EnchantmentHelper;
 
 import java.util.Random;
 public class OreHandler implements Listener
@@ -37,7 +37,7 @@ public class OreHandler implements Listener
 			state.update();
 		}
 
-		int td = hand.getEnchantments().getOrDefault(GitmanikPlugin.mruwiaReka, 0);
+		int td = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
 		if (td == 1)
 		{
 			Block b = block.getRelative(BlockFace.DOWN);
@@ -91,7 +91,7 @@ public class OreHandler implements Listener
 						player.sendMessage(ChatColor.GOLD + "Bogowie podarowali Ci swoje błogosławieństwo!");
 						ItemStack stack = new ItemStack(Material.EMERALD, 1);
 						ItemMeta meta = stack.getItemMeta();
-						meta.addEnchant(GitmanikPlugin.przychylnoscBogow, 1, true);
+						meta.addEnchant(EnchantmentHelper.GetEnchantment("przychylnosc"), 1, true);
 						meta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
 						stack.setItemMeta(meta);
 						world.dropItemNaturally(block.getLocation(), stack);
