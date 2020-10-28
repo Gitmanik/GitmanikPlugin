@@ -1,7 +1,6 @@
 package pl.gitmanik.events;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,13 +13,6 @@ import pl.gitmanik.GitmanikPlugin;
 
 public class CraftingHandler implements Listener
 {
-	private final GitmanikPlugin plugin;
-
-	public CraftingHandler(GitmanikPlugin gitmanikPlugin)
-	{
-		this.plugin = gitmanikPlugin;
-	}
-
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onCrafted(CraftItemEvent e)
 	{
@@ -65,8 +57,6 @@ public class CraftingHandler implements Listener
 					}
 				}
 
-				((Player) inv.getHolder()).sendMessage(GitmanikPlugin.compressedItems.containsValue(middleItem) + "");
-
 				if (GitmanikPlugin.compressedItems.containsValue(result))
 				{
 					if (middleItem.getAmount() != inv.getMaxStackSize())
@@ -75,7 +65,7 @@ public class CraftingHandler implements Listener
 
 				if (GitmanikPlugin.compressedItems.containsValue(middleItem))
 				{
-					inv.setResult(new ItemStack(middleItem.getType(), 64));
+					inv.setResult(new ItemStack(middleItem.getType(), inv.getMaxStackSize()));
 				}
 
 			}

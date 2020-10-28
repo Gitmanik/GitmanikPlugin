@@ -52,7 +52,6 @@ public class GitmanikPlugin extends JavaPlugin {
 
         try
         {
-
             GenerateCustomRecipes();
             GenerateChainmailRecipes();
         }
@@ -65,7 +64,7 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new CraftingHandler(this), this);
+        Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
 
         chathandler = new ChatHandler(this);
         Bukkit.getPluginManager().registerEvents(chathandler, this);
@@ -254,12 +253,6 @@ public class GitmanikPlugin extends JavaPlugin {
             Bukkit.addRecipe(depo);
         }
         catch (Exception ignored) {}
-
-//        ShapedRecipe f = new ShapedRecipe(new NamespacedKey(this, key + "_from"), new ItemStack(material, 64));
-//        f.shape("   ", " I ", "   ");
-//        f.setIngredient('I', material);
-//        f.setIngredient(' ', Material.AIR);
-//        Bukkit.addRecipe(f);
     }
 
     @Override
