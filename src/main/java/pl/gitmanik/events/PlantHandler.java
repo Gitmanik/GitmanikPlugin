@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.helpers.GitmanikDurability;
 
@@ -25,19 +26,19 @@ public class PlantHandler implements Listener
 		ItemStack hand = player.getInventory().getItemInMainHand();
 
 		Enchantment rekaFarmera = EnchantmentHelper.GetEnchantment("rekafarmera");
+		Enchantment depoEnchant = EnchantmentHelper.GetEnchantment("depoenchant");
 
 		assert rekaFarmera != null;
-		if (event.getItemInHand().getEnchantmentLevel(rekaFarmera) > 0)
-		{
-			event.setCancelled(true);
-			return;
-		}
-		if (event.getItemInHand().getEnchantmentLevel(EnchantmentHelper.GetEnchantment("depoenchant")) > 0)
-		{
-			event.setCancelled(true);
-			return;
-		}
+		assert depoEnchant != null;
 
+		if (GitmanikPlugin.compressedItems.containsValue(event.getItemInHand()) ||
+//				GitmanikPlugin.customItems.containsValue(event.getItemInHand() ||
+				event.getItemInHand().getEnchantmentLevel(rekaFarmera) > 0 ||
+				event.getItemInHand().getEnchantmentLevel(depoEnchant) > 0)
+		{
+			event.setCancelled(true);
+			return;
+		}
 
 		if (sechand.getEnchantmentLevel(rekaFarmera) == 1 && block.getBlockData() instanceof Ageable)
 		{
