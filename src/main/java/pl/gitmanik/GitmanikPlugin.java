@@ -32,6 +32,9 @@ public class GitmanikPlugin extends JavaPlugin {
     public static ArrayList<GitmanikEnchantment> customEnchantments = new ArrayList<>();
     public static HashMap<String, ItemStack> customItems = new HashMap<>();
 
+    public static HashMap<String, ItemStack> compressedItems = new HashMap<>();
+
+
     public static NightSkipping nightskipping = new NightSkipping();
 
     @Override
@@ -42,8 +45,14 @@ public class GitmanikPlugin extends JavaPlugin {
 
         RegisterCommands();
         GenerateCustomItemStacks();
+
+        GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
+        GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
+        GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+
         try
         {
+
             GenerateCustomRecipes();
             GenerateChainmailRecipes();
         }
@@ -225,10 +234,6 @@ public class GitmanikPlugin extends JavaPlugin {
         customItems.put("enderowy_depozyt", magicznaOrchidea);
         // -----------------------------------
 
-        GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
-        GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
-        GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
-
     }
 
     private void GenerateCompressedItem(Material material, String name, String key)
@@ -238,18 +243,23 @@ public class GitmanikPlugin extends JavaPlugin {
         meta.setDisplayName(name);
         compressed.setItemMeta(meta);
         compressed.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
-        customItems.put(key, compressed);
+        compressedItems.put(key, compressed);
 
         ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, key + "_to"), compressed);
-        depo.shape("III", "III", "III");
-        depo.setIngredient('I', material);
-        Bukkit.addRecipe(depo);
-
-        ShapedRecipe f = new ShapedRecipe(new NamespacedKey(this, key + "_from"), compressed);
         depo.shape("   ", " I ", "   ");
         depo.setIngredient('I', material);
         depo.setIngredient(' ', Material.AIR);
-        Bukkit.addRecipe(f);
+        try
+        {
+            Bukkit.addRecipe(depo);
+        }
+        catch (Exception ignored) {}
+
+//        ShapedRecipe f = new ShapedRecipe(new NamespacedKey(this, key + "_from"), new ItemStack(material, 64));
+//        f.shape("   ", " I ", "   ");
+//        f.setIngredient('I', material);
+//        f.setIngredient(' ', Material.AIR);
+//        Bukkit.addRecipe(f);
     }
 
     @Override

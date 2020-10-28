@@ -9,12 +9,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.events.ChatHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GPAdmin implements CommandExecutor, TabCompleter
@@ -49,13 +51,16 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 						toret.add(type.name());
 					}
 					break;
-				case "give":
-					toret.addAll(GitmanikPlugin.customItems.keySet());
-					break;
 			}
 		}
 		if (args.length == 2)
 		{
+			if (command.equals("give"))
+			{
+				toret.addAll(GitmanikPlugin.compressedItems.keySet());
+				toret.addAll(GitmanikPlugin.customItems.keySet());
+			}
+
 			if (command.equals("enchant"))
 			{
 				for (Enchantment e : GitmanikPlugin.customEnchantments)
@@ -134,13 +139,16 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 
 		String key = args[1].toLowerCase();
 
-		if (!GitmanikPlugin.customItems.containsKey(key))
+		HashMap<String, ItemStack> allItems = GitmanikPlugin.customItems;
+		allItems.putAll(GitmanikPlugin.compressedItems);
+
+		if (!allItems.containsKey(key))
 		{
-			player.sendMessage(ChatColor.RED + "Item " + key + " not found. Options: " + String.join(", ", GitmanikPlugin.customItems.keySet()));
+			player.sendMessage(ChatColor.RED + "Item " + key + " not found. Options: " + String.join(", ", allItems.keySet()));
 			return true;
 		}
 
-		player.getInventory().addItem(GitmanikPlugin.customItems.get(key));
+		player.getInventory().addItem(allItems.get(key));
 
 		return true;
 	}

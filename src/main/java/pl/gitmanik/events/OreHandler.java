@@ -79,7 +79,7 @@ public class OreHandler implements Listener
 			if (player.getGameMode() != GameMode.CREATIVE) {
 
 				if (Math.random() < 0.7 + 0.10 * fort) {
-					player.sendMessage(ChatColor.BLUE + "Gratulacje : ) Wykopał*ś diament!");
+//					player.sendMessage(ChatColor.BLUE + "Gratulacje : ) Wykopał*ś diament!");
 					Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.BLUE + " właśnie wykopał* diament!");
 					player.giveExp(4 + rand.nextInt(4));
 					world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));

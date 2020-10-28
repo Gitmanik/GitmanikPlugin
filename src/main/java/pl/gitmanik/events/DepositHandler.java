@@ -22,8 +22,7 @@ public class DepositHandler implements Listener
 		if (hand.getEnchantmentLevel(EnchantmentHelper.GetEnchantment("depoenchant")) > 0)
 		{
 			player.openInventory(player.getEnderChest());
-			if (!GitmanikDurability.EditDurability(player, hand, -1))
-				return;
+			GitmanikDurability.EditDurability(player, hand, -1);
 		}
 	}
 }

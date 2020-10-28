@@ -1,6 +1,7 @@
 package pl.gitmanik.events;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -10,6 +11,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.gitmanik.enchants.EnchantmentHelper;
+
+import java.util.Map;
 
 public class AnvilHandler implements Listener
 {
@@ -30,7 +33,7 @@ public class AnvilHandler implements Listener
 						if (meta instanceof Damageable){
 							Damageable durability = (Damageable) meta;
 							if (durability.hasDamage()){
-								durability.setDamage(Math.min(Material.DIAMOND_PICKAXE.getMaxDurability(), durability.getDamage() - Material.DIAMOND_PICKAXE.getMaxDurability() /3));
+								durability.setDamage(Math.min(Material.DIAMOND_PICKAXE.getMaxDurability(), durability.getDamage() - (Material.DIAMOND_PICKAXE.getMaxDurability() /3) * secondItem.getAmount()));
 							}
 						}
 					}
@@ -44,8 +47,16 @@ public class AnvilHandler implements Listener
 					}
 					if (secondItem.getItemMeta() instanceof EnchantmentStorageMeta)
 					{
-						((EnchantmentStorageMeta) secondItem.getItemMeta()).getStoredEnchants().forEach((key, value) ->
-								meta.addEnchant(key, value, false));
+						for (Map.Entry<Enchantment, Integer> entry : ((EnchantmentStorageMeta) secondItem.getItemMeta()).getStoredEnchants().entrySet())
+						{
+							Enchantment enchant = entry.getKey();
+							Integer level = entry.getValue();
+
+							if (meta.getEnchantLevel(enchant) == level)
+								level++;
+
+							meta.addEnchant(enchant, Math.max(meta.getEnchantLevel(enchant), Math.min(level, enchant.getMaxLevel())), false);
+						}
 					}
 					else
 					{

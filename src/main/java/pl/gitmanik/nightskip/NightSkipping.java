@@ -16,16 +16,20 @@ public class NightSkipping implements Runnable
 	public HashMap<World, Boolean> allowSkip = new HashMap<>();
 	public HashMap<World, Boolean> asked = new HashMap<>();
 
+	private boolean isDay(World world) {
+		long time = world.getTime();
+		return time < 12300 || time > 23850;
+	}
+
 	@Override
 	public void run()
 	{
 		for (World w : Bukkit.getWorlds())
 		{
-//			Bukkit.getLogger().severe(String.format("%s %s alreadysent world present: %s, alreadysent value: %s, allowskip: %s", alreadySent.size(), w.getName(), alreadySent.containsKey(w), alreadySent.getOrDefault(w, false), allowSkip.getOrDefault(w, false)));
 			if (!asked.containsKey(w))
 				asked.put(w, false);
 
-			if (w.getTime() > 14000)
+			if (!isDay(w))
 			{
 				if (!asked.get(w))
 				{
