@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.events.ChatHandler;
@@ -34,6 +36,7 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 			toret.add("durability"); //1 ARG
 			toret.add("listentity"); //1 ARG
 			toret.add("give"); //1 ARG
+			toret.add("damage"); //1
 			toret.add("enchant"); //2
 			return toret;
 		}
@@ -43,8 +46,10 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 			switch (command)
 			{
 				case "durability":
+				case "damage":
 					toret.add("[amount]");
 					break;
+
 				case "listentity":
 					for (EntityType type : EntityType.values())
 					{
@@ -113,11 +118,45 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 				return ListEnchants(player, args);
 			case "give":
 				return GiveItem(player,args);
+			case "damage":
+				return DamageItem(player,args);
 			default:
 				player.sendMessage("Unknown GPAdmin command.");
 				player.sendMessage("Options: spy durability listentity enchant listenchants give");
 				return false;
 		}
+	}
+
+	private boolean DamageItem(Player player, String[] args)
+	{
+		if (args.length == 1)
+		{
+			return false;
+		}
+
+		if (!isNumeric(args[1]))
+		{
+			player.sendMessage(ChatColor.RED + "GPAdmin->damage requires numeric value as first argument.");
+			return true;
+		}
+
+		ItemStack heldItem = player.getInventory().getItemInMainHand();
+
+		if (!(heldItem.getItemMeta() instanceof Damageable))
+		{
+			player.sendMessage(ChatColor.RED + "You must hold an damageable item to damage.");
+			return true;
+		}
+
+		Damageable d = (Damageable) heldItem.getItemMeta();
+
+		d.setDamage(Integer.parseInt(args[1]));
+
+		heldItem.setItemMeta((ItemMeta) d);
+
+		player.sendMessage("Set damage of " + heldItem.getItemMeta().getDisplayName() + ChatColor.WHITE + " to " + args[1]);
+
+		return true;
 	}
 
 	private boolean ToggleSpy(Player player, String[] args)

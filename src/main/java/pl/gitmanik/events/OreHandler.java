@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.gitmanik.enchants.EnchantmentHelper;
 
@@ -53,11 +53,15 @@ public class OreHandler implements Listener
 
 		if (!b.getDrops(hand).isEmpty())
 		{
-			if (hand.getItemMeta() instanceof Damageable)
+			ItemMeta m = hand.getItemMeta();
+			if (m instanceof Damageable)
 			{
-				((Damageable) hand.getItemMeta()).damage(1);
+				Damageable d = (Damageable) m;
+				d.setDamage(d.getDamage() + 1);
+				hand.setItemMeta(m);
 			}
-			else if (b.getType() == Material.DIAMOND_ORE){
+
+			if (b.getType() == Material.DIAMOND_ORE){
 				handleDiamondBlock(player, b);
 				b.setType(Material.AIR);
 			}
@@ -79,7 +83,6 @@ public class OreHandler implements Listener
 			if (player.getGameMode() != GameMode.CREATIVE) {
 
 				if (Math.random() < 0.7 + 0.10 * fort) {
-//					player.sendMessage(ChatColor.BLUE + "Gratulacje : ) Wykopał*ś diament!");
 					Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.BLUE + " właśnie wykopał* diament!");
 					player.giveExp(4 + rand.nextInt(4));
 					world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));
