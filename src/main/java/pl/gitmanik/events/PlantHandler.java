@@ -50,7 +50,7 @@ public class PlantHandler implements Listener
 					if (hand.getAmount() <= 0)
 						return;
 
-						if (Plant(player.getWorld().getBlockAt(block.getX() + x,block.getY(), block.getZ() + z), block.getType()))
+					if (Plant(player.getWorld().getBlockAt(block.getX() + x,block.getY(), block.getZ() + z), block.getType()))
 						{
 							if (hand.getAmount() == 1)
 							{
@@ -72,7 +72,7 @@ public class PlantHandler implements Listener
 
 	public boolean Plant(Block block, Material newMat)
 	{
-		if (block.getType() == Material.AIR)
+		if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR) //???
 		{
 			if (block.getRelative(BlockFace.DOWN).getType() == Material.FARMLAND)
 			{

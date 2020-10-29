@@ -230,7 +230,7 @@ public class GitmanikPlugin extends JavaPlugin {
         mrocznyDepozyt.setItemMeta(epozyt);
         mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1);
         GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
-        customItems.put("enderowy_depozyt", magicznaOrchidea);
+        customItems.put("enderowy_depozyt", mrocznyDepozyt);
         // -----------------------------------
 
     }
