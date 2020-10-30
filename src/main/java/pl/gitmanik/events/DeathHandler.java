@@ -1,5 +1,6 @@
 package pl.gitmanik.events;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,19 +20,19 @@ public class DeathHandler implements Listener
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntityDeath(PlayerDeathEvent e)
 	{
-		Player p = e.getEntity();
+		Player player = e.getEntity();
 
-		List<ItemStack> allPotions = Arrays.stream(p.getInventory().getContents()).filter(xx -> (xx != null && xx.getType() == Material.EMERALD)).collect(Collectors.toList());
-		for (ItemStack x : allPotions)
+		List<ItemStack> bozekFinder = Arrays.stream(player.getInventory().getContents()).filter(xx -> (xx != null && xx.getType() == Material.EMERALD)).collect(Collectors.toList());
+		for (ItemStack item : bozekFinder)
 		{
-			if (x.getEnchantmentLevel(EnchantmentHelper.GetEnchantment("przychylnosc")) == 1)
+			if (item.getEnchantmentLevel(EnchantmentHelper.GetEnchantment("przychylnosc")) == 1)
 			{
-				x.setAmount(x.getAmount() - 1);
+				item.setAmount(item.getAmount() - 1);
 				e.setKeepInventory(true);
 				e.setKeepLevel(true);
 				e.setDroppedExp(0);
 				e.getDrops().clear();
-				e.setDeathMessage(p.getDisplayName() + " zginął/a, ale Nieumarli zlitowali się nad nim i przywrócili rzeczy!");
+				e.setDeathMessage(ChatColor.GOLD + "Gracza " + player.getDisplayName() + "uśmiercono, ale Nieumarli zlitowali się nad nim i przywrócili mu dobytek!"); //nwm czy to bedzie dzialac ale chuj
 			}
 		}
 	}

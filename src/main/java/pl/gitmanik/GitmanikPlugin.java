@@ -23,6 +23,7 @@ import pl.gitmanik.nightskip.VoteSkipNightHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GitmanikPlugin extends JavaPlugin {
 
@@ -36,6 +37,8 @@ public class GitmanikPlugin extends JavaPlugin {
 
 
     public static NightSkipping nightskipping = new NightSkipping();
+
+    public static Random rand = new Random();
 
     @Override
     public void onEnable() {
@@ -105,6 +108,7 @@ public class GitmanikPlugin extends JavaPlugin {
         customEnchantments.add(new GitmanikEnchantment("tunneldigger", ChatColor.GOLD + "Mruwia Reka"));
         customEnchantments.add(new GitmanikEnchantment("przychylnosc", ChatColor.LIGHT_PURPLE + "Przychylność Bogów"));
         customEnchantments.add(new GitmanikEnchantment("rekafarmera", ChatColor.YELLOW + "Ręka Farmera"));
+        customEnchantments.add(new GitmanikEnchantment("diamentowaasceza", ChatColor.GOLD + "Diamentowa Asceza"));
         customEnchantments.add(new GitmanikEnchantment("depoenchant", "DEPO_ENCHANT"));
 
         customEnchantments.forEach((x) -> EnchantmentHelper.registerEnchant(this, x));
@@ -194,6 +198,15 @@ public class GitmanikPlugin extends JavaPlugin {
     private void GenerateCustomItemStacks()
     {
 
+        //BOŻEK
+        ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.EMERALD, 1);
+        ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
+        blogoslawienstwoNieumarlychMeta.addEnchant(EnchantmentHelper.GetEnchantment("przychylnosc"), 1, true);
+        blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
+        blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
+        customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
+        //------------------------------
+
         //MRUWI KLEJNOT
         ItemStack mruwiKlejnot = new ItemStack(Material.LAPIS_BLOCK);
         ItemMeta mruwiKlejnotMeta = mruwiKlejnot.getItemMeta();
@@ -228,7 +241,7 @@ public class GitmanikPlugin extends JavaPlugin {
         ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
         epozyt.setDisplayName("§dEnderowy Depozyt");
         mrocznyDepozyt.setItemMeta(epozyt);
-        mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1);
+        mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null???
         GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
         customItems.put("enderowy_depozyt", mrocznyDepozyt);
         // -----------------------------------
@@ -237,6 +250,9 @@ public class GitmanikPlugin extends JavaPlugin {
 
     private void GenerateCompressedItem(Material material, String name, String key)
     {
+        //TODO
+        //Dodać enchantment "KOMPRESJA" zamiast tego unbreaking 10 bo to wyglada jak cipa
+
         ItemStack compressed = new ItemStack(material);
         ItemMeta meta = compressed.getItemMeta();
         meta.setDisplayName(name);

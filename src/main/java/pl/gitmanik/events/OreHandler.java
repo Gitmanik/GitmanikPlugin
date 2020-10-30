@@ -16,10 +16,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.gitmanik.enchants.EnchantmentHelper;
 
-import java.util.Random;
 public class OreHandler implements Listener
 {
-	private Random rand = new Random();
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -37,8 +35,10 @@ public class OreHandler implements Listener
 			state.update();
 		}
 
-		int td = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
-		if (td == 1)
+		int mrValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
+		int daValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("diamentowaasceza"), 0);
+
+		if (mrValue == 1 || daValue == 1)
 		{
 			Block b = block.getRelative(BlockFace.DOWN);
 			Mine(player, hand, b);
@@ -57,7 +57,7 @@ public class OreHandler implements Listener
 			if (m instanceof Damageable)
 			{
 				Damageable d = (Damageable) m;
-				d.setDamage(d.getDamage() + 1);
+				d.setDamage(d.getDamage() + (GitmanikPlugin.rand.nextInt(4)));
 				hand.setItemMeta(m);
 			}
 
@@ -78,26 +78,33 @@ public class OreHandler implements Listener
 
 		if (block.getType() == Material.DIAMOND_ORE) {
 
-			int fort =  inv.getItemInMainHand().getEnchantments().getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 0);
+			ItemStack itemHand = new ItemStack(inv.getItemInMainHand());
+			int fort = itemHand.getEnchantments().getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 0);
+			int da = itemHand.getEnchantments().getOrDefault("diamentowaasceza", 0);
 
 			if (player.getGameMode() != GameMode.CREATIVE) {
 
-				if (Math.random() < 0.7 + 0.10 * fort) {
-					Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + ChatColor.BLUE + " właśnie wykopał* diament!");
-					player.giveExp(4 + rand.nextInt(4));
-					world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));
+				if (da != 1){
+					if (Math.random() < 0.7 + 0.10 * fort) {
+						Bukkit.broadcastMessage(ChatColor.AQUA + "Właśnie wydobyto diament przez" + ChatColor.GOLD + player.getName() + ChatColor.AQUA + ".");
+						player.giveExp(4 + GitmanikPlugin.rand.nextInt(4));
+						world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));
+					}
+					else
+					{
+						player.sendMessage(ChatColor.RED + "Diament w trakcie kopania się zniszczył.");
+						if (Math.random() < 0.1) { //3% szans na drop bez fortuny, z fortuną 1 2%, z fortuną 2 1%, z fortuną 3 0%
+							Bukkit.broadcastMessage(ChatColor.AQUA + "Bogowie obdarzyli błogosławieństwem " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
+							world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
+						}
+					}
 				}
 				else
 				{
-					player.sendMessage(ChatColor.RED + "Zniszczył*ś diament w trakcie kopania : (");
-					if (Math.random() < 0.10) {
-						player.sendMessage(ChatColor.GOLD + "Bogowie podarowali Ci swoje błogosławieństwo!");
-						ItemStack stack = new ItemStack(Material.EMERALD, 1);
-						ItemMeta meta = stack.getItemMeta();
-						meta.addEnchant(EnchantmentHelper.GetEnchantment("przychylnosc"), 1, true);
-						meta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
-						stack.setItemMeta(meta);
-						world.dropItemNaturally(block.getLocation(), stack);
+					if (Math.random() < 0.1) //czyli mamy 10% na drop
+					{
+						player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę" + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
+						world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
 					}
 				}
 			}
