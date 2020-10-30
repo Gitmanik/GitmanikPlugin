@@ -17,6 +17,7 @@ import pl.gitmanik.commands.Teleportsystem;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
+import pl.gitmanik.events.DeathHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 import pl.gitmanik.nightskip.NightSkipping;
 import pl.gitmanik.nightskip.VoteSkipNightHandler;
@@ -110,6 +111,7 @@ public class GitmanikPlugin extends JavaPlugin {
         customEnchantments.add(new GitmanikEnchantment("rekafarmera", ChatColor.YELLOW + "Ręka Farmera"));
         customEnchantments.add(new GitmanikEnchantment("diamentowaasceza", ChatColor.GOLD + "Diamentowa Asceza"));
         customEnchantments.add(new GitmanikEnchantment("depoenchant", "DEPO_ENCHANT"));
+        customEnchantments.add(new GitmanikEnchantment("kompresja", ChatColor.AQUA + "Kompresja"));
 
         customEnchantments.forEach((x) -> EnchantmentHelper.registerEnchant(this, x));
     }
@@ -201,9 +203,9 @@ public class GitmanikPlugin extends JavaPlugin {
         //BOŻEK
         ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.EMERALD, 1);
         ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
-        blogoslawienstwoNieumarlychMeta.addEnchant(EnchantmentHelper.GetEnchantment("przychylnosc"), 1, true);
         blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
         blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
+        EnchantmentHelper.AddEnchantWithLore(blogoslawienstwoNieumarlych, EnchantmentHelper.GetEnchantment("przychylnosc"), 1);
         customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
         //------------------------------
 
@@ -257,7 +259,7 @@ public class GitmanikPlugin extends JavaPlugin {
         ItemMeta meta = compressed.getItemMeta();
         meta.setDisplayName(name);
         compressed.setItemMeta(meta);
-        compressed.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+        EnchantmentHelper.AddEnchantWithLore(compressed, EnchantmentHelper.GetEnchantment("kompresja"), 1);
         compressedItems.put(key, compressed);
 
         ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, key + "_to"), compressed);
