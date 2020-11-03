@@ -235,7 +235,7 @@ public class GitmanikPlugin extends JavaPlugin {
         EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, EnchantmentHelper.GetEnchantment("rekafarmera"), 1);
         GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
         customItems.put("magiczna_orchidea", magicznaOrchidea);
-
+ 
         // ------------------------------------
 
         //GRZYB
@@ -252,9 +252,6 @@ public class GitmanikPlugin extends JavaPlugin {
 
     private void GenerateCompressedItem(Material material, String name, String key)
     {
-        //TODO
-        //Dodać enchantment "KOMPRESJA" zamiast tego unbreaking 10 bo to wyglada jak cipa
-
         ItemStack compressed = new ItemStack(material);
         ItemMeta meta = compressed.getItemMeta();
         meta.setDisplayName(name);
