@@ -4,35 +4,72 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import pl.gitmanik.GitmanikPlugin;
 
 public class CraftingHandler implements Listener
 {
-	private final GitmanikPlugin plugin;
-
-	public CraftingHandler(GitmanikPlugin gitmanikPlugin)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onCrafted(CraftItemEvent e)
 	{
-		this.plugin = gitmanikPlugin;
+		if (GitmanikPlugin.compressedItems.containsValue(e.getCurrentItem()))
+		{
+			e.getInventory().getItem(5).setAmount(0);
+		}
 	}
+
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onCraft(PrepareItemCraftEvent event)
 	{
+		ItemStack mruwiKilof = GitmanikPlugin.customItems.get("mruwi_kilof");
+		ItemStack mruwiKlejnot = GitmanikPlugin.customItems.get("mruwi_klejnot");
 
-		if (event.getInventory().getResult() != null && event.getInventory().getResult().equals(GitmanikPlugin.mruwiKilof))
+		CraftingInventory inv = event.getInventory();
+
+		ItemStack result = inv.getResult();
+
+		if (result != null)
 		{
-			ItemStack i = event.getInventory().getItem(5);
-			if (i != null && i.getType() == Material.DIAMOND_PICKAXE)
+			ItemStack middleItem = event.getInventory().getItem(5);
+			if (middleItem != null)
 			{
-				Damageable d = (Damageable) i.getItemMeta();
-				if (d.getDamage() > 0)
+				if (result.equals(mruwiKilof))
 				{
-					event.getInventory().setResult(null);
+					for(ItemStack item : inv.getMatrix()){
+						if (item != null && item.getType() == Material.LAPIS_BLOCK && !item.equals(mruwiKlejnot)){
+							inv.setResult(null);
+						}
+					}
+
+
+					if (middleItem.getType() == Material.DIAMOND_PICKAXE)
+					{
+						Damageable d = (Damageable) middleItem.getItemMeta();
+						if (d.getDamage() > 0)
+						{
+							inv.setResult(null);
+						}
+					}
 				}
+
+				if (GitmanikPlugin.compressedItems.containsValue(result))
+				{
+					if (middleItem.getAmount() != inv.getMaxStackSize())
+						inv.setResult(null);
+				}
+
+				if (GitmanikPlugin.compressedItems.containsValue(middleItem))
+				{
+					inv.setResult(new ItemStack(middleItem.getType(), inv.getMaxStackSize()));
+				}
+
 			}
+
 		}
 	}
 }

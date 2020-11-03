@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.gitmanik.GitmanikPlugin;
+import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.helpers.GitmanikDurability;
 
 public class PlantHandler implements Listener
@@ -23,19 +25,22 @@ public class PlantHandler implements Listener
 		ItemStack sechand = player.getInventory().getItemInOffHand();
 		ItemStack hand = player.getInventory().getItemInMainHand();
 
-		if (event.getItemInHand().getEnchantmentLevel(GitmanikPlugin.rekaFarmera) > 0)
-		{
-			event.setCancelled(true);
-			return;
-		}
-		if (event.getItemInHand().getEnchantmentLevel(GitmanikPlugin.depoEnchant) > 0)
+		Enchantment rekaFarmera = EnchantmentHelper.GetEnchantment("rekafarmera");
+		Enchantment depoEnchant = EnchantmentHelper.GetEnchantment("depoenchant");
+
+		assert rekaFarmera != null;
+		assert depoEnchant != null;
+
+		if (GitmanikPlugin.compressedItems.containsValue(event.getItemInHand()) ||
+//				GitmanikPlugin.customItems.containsValue(event.getItemInHand() ||
+				event.getItemInHand().getEnchantmentLevel(rekaFarmera) > 0 ||
+				event.getItemInHand().getEnchantmentLevel(depoEnchant) > 0)
 		{
 			event.setCancelled(true);
 			return;
 		}
 
-
-		if (sechand.getEnchantmentLevel(GitmanikPlugin.rekaFarmera) == 1 && block.getBlockData() instanceof Ageable)
+		if (sechand.getEnchantmentLevel(rekaFarmera) == 1 && block.getBlockData() instanceof Ageable)
 		{
 			hand.setAmount(hand.getAmount() - 1);
 			for (int x = -1; x <=1; x++)
@@ -45,7 +50,7 @@ public class PlantHandler implements Listener
 					if (hand.getAmount() <= 0)
 						return;
 
-						if (Plant(player.getWorld().getBlockAt(block.getX() + x,block.getY(), block.getZ() + z), block.getType()))
+					if (Plant(player.getWorld().getBlockAt(block.getX() + x,block.getY(), block.getZ() + z), block.getType()))
 						{
 							if (hand.getAmount() == 1)
 							{
@@ -67,7 +72,7 @@ public class PlantHandler implements Listener
 
 	public boolean Plant(Block block, Material newMat)
 	{
-		if (block.getType() == Material.AIR)
+		if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR) //???
 		{
 			if (block.getRelative(BlockFace.DOWN).getType() == Material.FARMLAND)
 			{

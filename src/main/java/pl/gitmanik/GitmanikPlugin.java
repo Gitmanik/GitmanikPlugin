@@ -1,6 +1,7 @@
 package pl.gitmanik;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -13,57 +14,46 @@ import pl.gitmanik.commands.GPAdmin;
 import pl.gitmanik.commands.Homesystem;
 import pl.gitmanik.commands.StackPotions;
 import pl.gitmanik.commands.Teleportsystem;
-import pl.gitmanik.enchants.*;
+import pl.gitmanik.enchants.EnchantmentHelper;
+import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
+import pl.gitmanik.events.DeathHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 import pl.gitmanik.nightskip.NightSkipping;
 import pl.gitmanik.nightskip.VoteSkipNightHandler;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
 public class GitmanikPlugin extends JavaPlugin {
 
     public static GitmanikPlugin gitmanikplugin;
-
-    public static TunnelDigger mruwiaReka;
-    public static PrzychylnoscBogow przychylnoscBogow;
-    public static FarmersHand rekaFarmera;
-    public static DepoEnchant depoEnchant;
-
     public static ChatHandler chathandler;
 
-    public static ItemStack mruwiKilof, magicznaOrchidea, enderowyDepozyt, mruwiKlejnot, skompresowanyCobble, skompresowanyPiasek, skompresowanyDirt;
+    public static ArrayList<GitmanikEnchantment> customEnchantments = new ArrayList<>();
+    public static HashMap<String, ItemStack> customItems = new HashMap<>();
 
-//    public static DynmapAPI dynmap;
-
+    public static HashMap<String, ItemStack> compressedItems = new HashMap<>();
 
 
     public static NightSkipping nightskipping = new NightSkipping();
+
+    public static Random rand = new Random();
 
     @Override
     public void onEnable() {
         gitmanikplugin = this;
 
-//        dynmap = (DynmapAPI) Bukkit.getServer().getPluginManager().getPlugin("dynmap");
-//
-//        if (dynmap != null)
-//        {
-//            Bukkit.getPluginManager().registerEvents(new ChatHandler(), this);
-//            dynmap.getMarkerAPI().getMarkerSets().forEach((x) ->
-//            {
-//                x.getAreaMarkers().forEach((y) ->
-//                {
-//                    y.get
-//                });
-//            });
-//        }
-//        else
-//        {
-//            getLogger().info("Dynmap not found - chat range will be disabled");
-//        }
-
         RegisterCustomEnchants();
 
         RegisterCommands();
         GenerateCustomItemStacks();
+
+        GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
+        GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
+        GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+
         try
         {
             GenerateCustomRecipes();
@@ -78,8 +68,7 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new CraftingHandler(this), this);
-        Bukkit.getPluginManager().registerEvents(new MruwiKilofCraftingHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
 
         chathandler = new ChatHandler(this);
         Bukkit.getPluginManager().registerEvents(chathandler, this);
@@ -93,7 +82,10 @@ public class GitmanikPlugin extends JavaPlugin {
     {
         //Admin
 
-        this.getCommand("gpadmin").setExecutor(new GPAdmin());
+        GPAdmin a = new GPAdmin();
+        this.getCommand("gpadmin").setExecutor(a);
+        this.getCommand("gpadmin").setTabCompleter(a);
+
 
         //QoL
         this.getCommand("p").setExecutor(new StackPotions());
@@ -114,15 +106,14 @@ public class GitmanikPlugin extends JavaPlugin {
 
     private void RegisterCustomEnchants()
     {
-        mruwiaReka = new TunnelDigger(new NamespacedKey(this, "tunneldigger"));
-        przychylnoscBogow = new PrzychylnoscBogow(new NamespacedKey(this, "przychylnosc"));
-        rekaFarmera = new FarmersHand(new NamespacedKey(this, "rekafarmera"));
-        depoEnchant = new DepoEnchant(new NamespacedKey(this, "depoenchant"));
+        customEnchantments.add(new GitmanikEnchantment("tunneldigger", ChatColor.GOLD + "Mruwia Reka"));
+        customEnchantments.add(new GitmanikEnchantment("przychylnosc", ChatColor.LIGHT_PURPLE + "Przychylność Bogów"));
+        customEnchantments.add(new GitmanikEnchantment("rekafarmera", ChatColor.YELLOW + "Ręka Farmera"));
+        customEnchantments.add(new GitmanikEnchantment("diamentowaasceza", ChatColor.GOLD + "Diamentowa Asceza"));
+        customEnchantments.add(new GitmanikEnchantment("depoenchant", "DEPO_ENCHANT"));
+        customEnchantments.add(new GitmanikEnchantment("kompresja", ChatColor.AQUA + "Kompresja"));
 
-        EnchantmentHelper.registerEnchant(this, rekaFarmera);
-        EnchantmentHelper.registerEnchant(this, mruwiaReka);
-        EnchantmentHelper.registerEnchant(this, przychylnoscBogow);
-        EnchantmentHelper.registerEnchant(this, depoEnchant);
+        customEnchantments.forEach((x) -> EnchantmentHelper.registerEnchant(this, x));
     }
 
     private void GenerateChainmailRecipes()
@@ -172,14 +163,14 @@ public class GitmanikPlugin extends JavaPlugin {
     private void GenerateCustomRecipes()
     {
         //MRUWI KLEJNOT
-        ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), mruwiKlejnot);
+        ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), customItems.get("mruwi_klejnot"));
         mruwiKlejnotRecipe.shape("LLL", "LEL", "LLL");
         mruwiKlejnotRecipe.setIngredient('L', Material.LAPIS_BLOCK);
         mruwiKlejnotRecipe.setIngredient('E', Material.ENDER_EYE);
         Bukkit.addRecipe(mruwiKlejnotRecipe);
 
         //MRUWI KILOF
-        ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), mruwiKilof);
+        ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), customItems.get("mruwi_kilof"));
         mruwiRecip.shape("LLL", "RKR", "RRR");
         mruwiRecip.setIngredient('L', Material.LAPIS_BLOCK);
         mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
@@ -187,7 +178,7 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.addRecipe(mruwiRecip);
 
         //MAGICZNA ORCHIDEA
-        ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), magicznaOrchidea);
+        ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), customItems.get("magiczna_orchidea"));
         orchidearecipe.shape("LHL", "HOH", "LHL");
         orchidearecipe.setIngredient('O', Material.BLUE_ORCHID);
         orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
@@ -195,23 +186,28 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.addRecipe(orchidearecipe);
 
         //ENDEROWY DEPOZYT
-        ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "mroczny_depozyt"), enderowyDepozyt);
+        ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "enderowy_depozyt"), customItems.get("enderowy_depozyt"));
         depo.shape("PPP", "NGN", "NNN");
         depo.setIngredient('P', Material.ENDER_PEARL);
         depo.setIngredient('G', Material.GLOWSTONE_DUST);
         depo.setIngredient('N', Material.NETHERRACK);
         Bukkit.addRecipe(depo);
 
-
-
         StonecuttingRecipe cobbleToGravel = new StonecuttingRecipe(new NamespacedKey(this, "cobble_gravel"), new ItemStack(Material.GRAVEL, 2), Material.COBBLESTONE);
         Bukkit.addRecipe(cobbleToGravel);
-
-
     }
 
     private void GenerateCustomItemStacks()
     {
+
+        //BOŻEK
+        ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.EMERALD, 1);
+        ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
+        blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
+        blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
+        EnchantmentHelper.AddEnchantWithLore(blogoslawienstwoNieumarlych, EnchantmentHelper.GetEnchantment("przychylnosc"), 1);
+        customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
+        //------------------------------
 
         //MRUWI KLEJNOT
         ItemStack mruwiKlejnot = new ItemStack(Material.LAPIS_BLOCK);
@@ -219,7 +215,7 @@ public class GitmanikPlugin extends JavaPlugin {
         mruwiKlejnotMeta.setDisplayName("§6Mruwi Klejnot");
         mruwiKlejnot.setItemMeta(mruwiKlejnotMeta);
         mruwiKlejnot.addUnsafeEnchantment(Enchantment.LUCK, 10);
-        GitmanikPlugin.mruwiKlejnot = mruwiKlejnot;
+        customItems.put("mruwi_klejnot", mruwiKlejnot);
         //------------------------------------
 
         //-------------------------------
@@ -227,8 +223,8 @@ public class GitmanikPlugin extends JavaPlugin {
         ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
         mruwiaMeta.setDisplayName("§dMruwi Kilof");
         mruwiKilof.setItemMeta(mruwiaMeta);
-        EnchantmentHelper.AddEnchantWithLore(mruwiKilof, mruwiaReka, 1);
-        GitmanikPlugin.mruwiKilof = mruwiKilof;
+        EnchantmentHelper.AddEnchantWithLore(mruwiKilof, EnchantmentHelper.GetEnchantment("tunneldigger"), 1);
+        customItems.put("mruwi_kilof", mruwiKilof);
         //-------------------------------------------
 
         //KWIAT
@@ -236,9 +232,10 @@ public class GitmanikPlugin extends JavaPlugin {
         ItemMeta orchideaMeta = magicznaOrchidea.getItemMeta();
         orchideaMeta.setDisplayName("§dMagiczna Orchidea");
         magicznaOrchidea.setItemMeta(orchideaMeta);
-        EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, rekaFarmera, 1);
+        EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, EnchantmentHelper.GetEnchantment("rekafarmera"), 1);
         GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
-        GitmanikPlugin.magicznaOrchidea = magicznaOrchidea;
+        customItems.put("magiczna_orchidea", magicznaOrchidea);
+ 
         // ------------------------------------
 
         //GRZYB
@@ -246,38 +243,31 @@ public class GitmanikPlugin extends JavaPlugin {
         ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
         epozyt.setDisplayName("§dEnderowy Depozyt");
         mrocznyDepozyt.setItemMeta(epozyt);
-        mrocznyDepozyt.addEnchantment(depoEnchant, 1);
+        mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null???
         GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
-        GitmanikPlugin.enderowyDepozyt = mrocznyDepozyt;
+        customItems.put("enderowy_depozyt", mrocznyDepozyt);
         // -----------------------------------
 
-//        //SKOMPRESOWANY COBBLE
-//        ItemStack skompresowanyCobble = new ItemStack(Material.COBBLESTONE);
-//        ItemMeta skompresowanyC = skompresowanyCobble.getItemMeta();
-//        skompresowanyC.setDisplayName("§dSkompresowany Cobble");
-//        skompresowanyCobble.setItemMeta(skompresowanyC);
-//        skompresowanyCobble.addEnchantment(Enchantment.DURABILITY, 10);
-//        GitmanikPlugin.skompresowanyCobble = skompresowanyCobble;
-//        // -----------------------------------
-//
-//        //SKOMPRESOWANY COBBLE
-//        ItemStack skompresowanyDirt = new ItemStack(Material.DIRT);
-//        ItemMeta skompresowanyD = skompresowanyDirt.getItemMeta();
-//        skompresowanyD.setDisplayName("§dSkompresowany Dirt");
-//        skompresowanyDirt.setItemMeta(skompresowanyD);
-//        skompresowanyDirt.addEnchantment(Enchantment.DURABILITY, 10);
-//        GitmanikPlugin.skompresowanyDirt = skompresowanyDirt;
-//        // -----------------------------------
-//
-//        //SKOMPRESOWANY PIASEK
-//        ItemStack skompresowanyPiasek = new ItemStack(Material.SAND);
-//        ItemMeta skompresowanyP = skompresowanyPiasek.getItemMeta();
-//        skompresowanyP.setDisplayName("§dSkompresowany Piasek");
-//        skompresowanyPiasek.setItemMeta(skompresowanyP);
-//        skompresowanyPiasek.addEnchantment(Enchantment.DURABILITY, 10);
-//        GitmanikPlugin.skompresowanyPiasek = skompresowanyPiasek;
-//        // -----------------------------------
+    }
 
+    private void GenerateCompressedItem(Material material, String name, String key)
+    {
+        ItemStack compressed = new ItemStack(material);
+        ItemMeta meta = compressed.getItemMeta();
+        meta.setDisplayName(name);
+        compressed.setItemMeta(meta);
+        EnchantmentHelper.AddEnchantWithLore(compressed, EnchantmentHelper.GetEnchantment("kompresja"), 1);
+        compressedItems.put(key, compressed);
+
+        ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, key + "_to"), compressed);
+        depo.shape("   ", " I ", "   ");
+        depo.setIngredient('I', material);
+        depo.setIngredient(' ', Material.AIR);
+        try
+        {
+            Bukkit.addRecipe(depo);
+        }
+        catch (Exception ignored) {}
     }
 
     @Override

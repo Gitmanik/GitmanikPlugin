@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import pl.gitmanik.GitmanikPlugin;
+import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.helpers.GitmanikDurability;
 
 public class DepositHandler implements Listener
@@ -19,11 +19,10 @@ public class DepositHandler implements Listener
 		if (hand == null)
 			return;
 
-		if (hand.getEnchantmentLevel(GitmanikPlugin.depoEnchant) > 0)
+		if (hand.getEnchantmentLevel(EnchantmentHelper.GetEnchantment("depoenchant")) > 0)
 		{
 			player.openInventory(player.getEnderChest());
-			if (!GitmanikDurability.EditDurability(player, hand, -1))
-				return;
+			GitmanikDurability.EditDurability(player, hand, -1);
 		}
 	}
 }

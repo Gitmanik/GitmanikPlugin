@@ -4,6 +4,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import pl.gitmanik.GitmanikPlugin;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,5 +47,15 @@ public class EnchantmentHelper
 			e.printStackTrace();
 		}
 
+	}
+
+	public static Enchantment GetEnchantment(String key)
+	{
+		for (Enchantment x : GitmanikPlugin.customEnchantments)
+		{
+			if (x.getKey().getKey().equals(key))
+				return x;
+		}
+		return null;
 	}
 }

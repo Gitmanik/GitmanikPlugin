@@ -4,18 +4,91 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.events.ChatHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 
-public class GPAdmin implements CommandExecutor
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class GPAdmin implements CommandExecutor, TabCompleter
 {
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
+	{
+		List<String> toret = new ArrayList<>();
+
+		String command = args[0];
+		if (command.equals(""))
+		{
+			toret.add("spy"); //NO ARGS
+			toret.add("listenchants"); //NO ARGS
+			toret.add("durability"); //1 ARG
+			toret.add("listentity"); //1 ARG
+			toret.add("give"); //1 ARG
+			toret.add("damage"); //1
+			toret.add("enchant"); //2
+			return toret;
+		}
+
+		if (args.length == 1)
+		{
+			switch (command)
+			{
+				case "durability":
+				case "damage":
+					toret.add("[amount]");
+					break;
+
+				case "listentity":
+					for (EntityType type : EntityType.values())
+					{
+						toret.add(type.name());
+					}
+					break;
+			}
+		}
+		if (args.length == 2)
+		{
+			if (command.equals("give"))
+			{
+				toret.addAll(GitmanikPlugin.compressedItems.keySet());
+				toret.addAll(GitmanikPlugin.customItems.keySet());
+			}
+
+			if (command.equals("enchant"))
+			{
+				for (Enchantment e : GitmanikPlugin.customEnchantments)
+				{
+					toret.add(e.getKey().getKey());
+				}
+			}
+		}
+		if (args.length == 3)
+		{
+			if (command.equals("enchant"))
+			{
+				if (EnchantmentHelper.GetEnchantment(args[1]) != null)
+					for (Enchantment e : GitmanikPlugin.customEnchantments)
+					{
+						toret.add("[level]");
+					}
+			}
+		}
+
+		return toret;
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
@@ -45,11 +118,45 @@ public class GPAdmin implements CommandExecutor
 				return ListEnchants(player, args);
 			case "give":
 				return GiveItem(player,args);
+			case "damage":
+				return DamageItem(player,args);
 			default:
 				player.sendMessage("Unknown GPAdmin command.");
 				player.sendMessage("Options: spy durability listentity enchant listenchants give");
 				return false;
 		}
+	}
+
+	private boolean DamageItem(Player player, String[] args)
+	{
+		if (args.length == 1)
+		{
+			return false;
+		}
+
+		if (!isNumeric(args[1]))
+		{
+			player.sendMessage(ChatColor.RED + "GPAdmin->damage requires numeric value as first argument.");
+			return true;
+		}
+
+		ItemStack heldItem = player.getInventory().getItemInMainHand();
+
+		if (!(heldItem.getItemMeta() instanceof Damageable))
+		{
+			player.sendMessage(ChatColor.RED + "You must hold an damageable item to damage.");
+			return true;
+		}
+
+		Damageable d = (Damageable) heldItem.getItemMeta();
+
+		d.setDamage(Integer.parseInt(args[1]));
+
+		heldItem.setItemMeta((ItemMeta) d);
+
+		player.sendMessage("Set damage of " + heldItem.getItemMeta().getDisplayName() + ChatColor.WHITE + " to " + args[1]);
+
+		return true;
 	}
 
 	private boolean ToggleSpy(Player player, String[] args)
@@ -68,61 +175,42 @@ public class GPAdmin implements CommandExecutor
 		{
 			return false;
 		}
-		ItemStack s;
-		
-		switch (args[1].toLowerCase())
-		{
-			case "mruwikilof":
-				s = GitmanikPlugin.mruwiKilof;
-				break;
-			case "enderowydepozyt":
-				s = GitmanikPlugin.enderowyDepozyt;
-				break;
-			case "magicznaorchidea":
-				s = GitmanikPlugin.magicznaOrchidea;
-				break;
 
-			default:
-				player.sendMessage("Unknown GPAdmin command.");
-				player.sendMessage("Options: mruwikilof enderowydepozyt magicznaorchidea");
-				return false;
+		String key = args[1].toLowerCase();
+
+		HashMap<String, ItemStack> allItems = GitmanikPlugin.customItems;
+		allItems.putAll(GitmanikPlugin.compressedItems);
+
+		if (!allItems.containsKey(key))
+		{
+			player.sendMessage(ChatColor.RED + "Item " + key + " not found. Options: " + String.join(", ", allItems.keySet()));
+			return true;
 		}
 
-		player.getInventory().addItem(s);
+		player.getInventory().addItem(allItems.get(key));
 
 		return true;
 	}
 
 	private boolean Enchant(Player player, String[] args)
 	{
-		Enchantment e;
 
 		if (args.length < 3)
 		{
-			player.sendMessage("[farmershand tunneldigger przychylnosc depoenchant] [level]");
+			player.sendMessage("/gpadmin [key] [level]");
 			return false;
 		}
 
-		switch (args[1].toLowerCase())
-		{
-			case "farmershand":
-				e = GitmanikPlugin.rekaFarmera;
-				break;
-			case "tunneldigger":
-				e = GitmanikPlugin.mruwiaReka;
-				break;
-			case "przychylnosc":
-				e = GitmanikPlugin.przychylnoscBogow;
-				break;
-			case "depoenchant":
-				e = GitmanikPlugin.depoEnchant;
-				break;
+		String key = args[1].toLowerCase();
 
-			default:
-				player.sendMessage("Unexpected value: " + args[1].toLowerCase());
-				player.sendMessage("Options: farmershand tunneldigger przychylnosc depoenchant");
-				return true;
+		Enchantment e = EnchantmentHelper.GetEnchantment(key);
+
+		if (e == null)
+		{
+			player.sendMessage(ChatColor.RED + "Enchantment " + key + " not found. Options: " + String.join(", ", GitmanikPlugin.customItems.keySet()));
+			return true;
 		}
+
 		if (!isNumeric(args[2]))
 		{
 			player.sendMessage(ChatColor.RED + "GPAdmin->durability requires numeric value as first argument.");
