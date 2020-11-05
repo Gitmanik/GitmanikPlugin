@@ -6,17 +6,19 @@ GitmanikPlugin is a simple Minecraft plugin containing minor tweaks and addition
 
 No additional libraries are required.
 
-```package``` project with Maven and put target JAR to your plugins folder.
+```package``` project with Maven and put target JAR to your plugins folder or download from Releases.
 
 ## Plugin content
 
 - Fortune enchantment system change: added percentage to drop diamonds (70% + 10% for Fortune level)
 - Custom enchantments
 - Durability system
+- Custom items!
+- Voting for night skip
 
 - Potion stacker (/p) (gitmanik.stackpotions)
 - Admin command (/gpadmin) (gitmanik.admin)
-- Home system (/home /sethome)
+- Paid Home system (/dom /ustawdom)
 
 
 ## Contributing

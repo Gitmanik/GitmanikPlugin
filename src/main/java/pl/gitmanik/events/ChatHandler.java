@@ -26,13 +26,12 @@ public class ChatHandler implements Listener
 	@EventHandler(ignoreCancelled = true)
 	public void onChat(AsyncPlayerChatEvent event)
 	{
-
 		Player sender = event.getPlayer();
 		List<Player> players = sender.getWorld().getPlayers();
 		String message = event.getMessage();
 		boolean global = message.startsWith("g ") || message.startsWith("G ");
 
-		plugin.getLogger().info(((global) ? "Global" : "Local") + " Message by " + sender.getDisplayName() + ": " + message);
+		plugin.getLogger().info(sender.getLocation() + ((global) ? " Global" : " Local") + " Message by " + sender.getDisplayName() + ": " + message);
 
 		if (global)
 		{

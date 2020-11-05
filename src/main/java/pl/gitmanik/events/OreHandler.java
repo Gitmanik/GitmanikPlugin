@@ -100,7 +100,7 @@ public class OreHandler implements Listener
 
 			if (da != 1){
 				if (Math.random() < 0.7 + 0.10 * fort) {
-					Bukkit.broadcastMessage(ChatColor.AQUA + "Właśnie wydobyto diament przez" + ChatColor.GOLD + player.getName() + ChatColor.AQUA + ".");
+					Bukkit.broadcastMessage(ChatColor.AQUA + "Właśnie wydobyto diament przez " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + ".");
 					player.giveExp(4 + GitmanikPlugin.rand.nextInt(4));
 					world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));
 				}
@@ -117,7 +117,7 @@ public class OreHandler implements Listener
 			{
 				if (Math.random() < 0.1) //czyli mamy 10% na drop
 				{
-					player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę" + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
+					player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
 					world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
 				}
 			}
