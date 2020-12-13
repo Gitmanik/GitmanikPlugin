@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import pl.gitmanik.GitmanikPlugin;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,11 +17,6 @@ public class NightSkipping implements Runnable
 	public HashMap<World, Boolean> allowSkip = new HashMap<>();
 	public HashMap<World, Boolean> asked = new HashMap<>();
 
-	private boolean isDay(World world) {
-		long time = world.getTime();
-		return time < 12300 || time > 23850;
-	}
-
 	@Override
 	public void run()
 	{
@@ -29,7 +25,7 @@ public class NightSkipping implements Runnable
 			if (!asked.containsKey(w))
 				asked.put(w, false);
 
-			if (!isDay(w))
+			if (!GitmanikPlugin.gitmanikplugin.isDay(w))
 			{
 				if (!asked.get(w))
 				{

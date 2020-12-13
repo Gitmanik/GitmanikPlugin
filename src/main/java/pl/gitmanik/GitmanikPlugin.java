@@ -1,9 +1,6 @@
 package pl.gitmanik;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -268,6 +265,11 @@ public class GitmanikPlugin extends JavaPlugin {
             Bukkit.addRecipe(depo);
         }
         catch (Exception ignored) {}
+    }
+
+    public boolean isDay(World world) {
+        long time = world.getTime();
+        return time < 12300 || time > 23850;
     }
 
     @Override

@@ -1,4 +1,4 @@
-# GitmanikPlugin
+# GitmanikPlugin [![Build Status](https://travis-ci.org/Gitmanik/GitmanikPlugin.svg?branch=master)](https://travis-ci.org/Gitmanik/GitmanikPlugin)
 
 GitmanikPlugin is a simple Minecraft plugin containing minor tweaks and additions to SMP.
 

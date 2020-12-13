@@ -30,13 +30,16 @@ public class ChatHandler implements Listener
 		List<Player> players = sender.getWorld().getPlayers();
 		String message = event.getMessage();
 		boolean global = message.startsWith("g ") || message.startsWith("G ");
+		if (global)
+			message = message.substring(2);
 
-		plugin.getLogger().info(sender.getLocation() + ((global) ? " Global" : " Local") + " Message by " + sender.getDisplayName() + ": " + message);
+		Location l = sender.getLocation();
 
+		plugin.getLogger().info( String.format("§6%s,%s,%s§r [%s§r] §e%s§r: §f%s", l.getBlockX(), l.getBlockY(), l.getBlockZ(), global ? "§aGlobal" : "§9Local", sender.getDisplayName(), message.replace("%", "%%")));
 		if (global)
 		{
-			String target = ChatColor.GREEN + "[GLOBALNY] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message.substring(2);
-			event.setMessage(message.substring(2));
+			String target = ChatColor.GREEN + "[GLOBALNY] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message;
+			event.setMessage(message);
 			event.setFormat(target.replace("%", "%%"));
 		}
 		else

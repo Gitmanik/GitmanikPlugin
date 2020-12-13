@@ -71,12 +71,16 @@ public class OreHandler implements Listener
 
 		if (!b.getDrops(hand).isEmpty())
 		{
-			ItemMeta itemMeta = hand.getItemMeta();
-			if (itemMeta instanceof Damageable)
+			int unbValue = hand.getEnchantments().getOrDefault(Enchantment.DURABILITY, 0);
+			if (GitmanikPlugin.rand.nextDouble() > unbValue * 0.2)
 			{
-				Damageable d = (Damageable) itemMeta;
-				d.setDamage(d.getDamage() + (GitmanikPlugin.rand.nextInt(4)));
-				hand.setItemMeta(itemMeta);
+				ItemMeta itemMeta = hand.getItemMeta();
+				if (itemMeta instanceof Damageable)
+				{
+					Damageable d = (Damageable) itemMeta;
+					d.setDamage(d.getDamage() + (GitmanikPlugin.rand.nextInt(4)));
+					hand.setItemMeta(itemMeta);
+				}
 			}
 
 			if (b.getType() == Material.DIAMOND_ORE){
