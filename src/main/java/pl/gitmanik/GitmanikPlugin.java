@@ -1,6 +1,7 @@
 package pl.gitmanik;
 
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -42,6 +43,8 @@ public class GitmanikPlugin extends JavaPlugin {
         gitmanikplugin = this;
 
         dataPath = this.getDataFolder().getPath() + "/";
+        this.saveDefaultConfig();
+        FileConfiguration config = this.getConfig();
 
         RegisterCustomEnchants();
 
@@ -53,27 +56,33 @@ public class GitmanikPlugin extends JavaPlugin {
 
         this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 
-        GenerateCustomItemStacks();
+        if (config.getBoolean("enableCustomRecipes")) {
+            GenerateCustomItemStacks();
 
-        GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
-        GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
-        GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+            GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
+            GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
+            GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
 
-        try
-        {
-            GenerateCustomRecipes();
-            GenerateChainmailRecipes();
+            try
+            {
+                GenerateCustomRecipes();
+                GenerateChainmailRecipes();
+            }
+            catch (Exception ignored){}
+
+            Bukkit.getPluginManager().registerEvents(new OreHandler(), this);
+            Bukkit.getPluginManager().registerEvents(new DeathHandler(), this);
+            Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
+            Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
+            Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
+            Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
         }
-        catch (Exception ignored){}
+
+
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, nightskipping, 0L, 60L);
 
-        Bukkit.getPluginManager().registerEvents(new OreHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DeathHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
+
 
         chathandler = new ChatHandler(this);
         Bukkit.getPluginManager().registerEvents(chathandler, this);
