@@ -1,15 +1,26 @@
 enableChainmailRecipes: true
 enableCobbleToGravelStonecutter: true
-
-#type block values like OBSIDIAN, BEDROCK
-allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE]
-
 customItems:
   enableMruwiKlejnot: true
   enableMruwiKilof: true
   enableMagicznaOrchidea: true
   enableBlogoslawienstwoNieumarlych: true
   enableEnderowyDepozyt: true
+
+#type block values like OBSIDIAN, BEDROCK
+allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE]
+
+#USE ONLY FLOATED NUMBERS THERE
+#baseDiamondDrop chance fe. 0.5 = 50%
+#fortuneDiamondDrop is additional dropchance per fortune lvl added to (100%-baseDiamondDrop)
+#for example if baseDiamondDrop = 0.5 and fortuneDiamondDrop = 0.1
+#in this example fortune 3 pickaxe there is 80% dropchance of diamond
+diamondsystem:
+  baseDropChance: 0.7
+  fortuneDropChance: 0.1
+
+blessingsystem:
+  drop: 0.1
 
 skipsystem:
   enabled: true

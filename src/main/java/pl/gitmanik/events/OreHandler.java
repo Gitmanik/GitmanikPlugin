@@ -23,6 +23,9 @@ import java.util.List;
 public class OreHandler implements Listener
 {
 	public static final ArrayList<Material> allowedBlocks = new ArrayList<>();
+	public double baseChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.baseDropChance");
+	public double fortuneChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.fortuneDropChance");
+	public double blessingDrop = GitmanikPlugin.gp.getConfig().getDouble("blessingsystem.drop");
 
 	public OreHandler()
 	{
@@ -57,12 +60,14 @@ public class OreHandler implements Listener
 
 		int mrValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
 
-		if (mrValue > 0)
-		{
-			Block b = block.getRelative(BlockFace.DOWN);
-			Mine(player, hand, b);
+		if (mrValue > 0) {
+			int blockOffset = player.getLocation().getBlockY() - block.getY();
+			if (blockOffset == 0 || blockOffset == -1) {
+				Mine(player, hand, block.getLocation().add(0, blockOffset == 0 ? 1 : -1, 0).getBlock());
+			}
 		}
 	}
+
 
 	private void Mine(Player player, ItemStack hand, Block b)
 	{
@@ -102,7 +107,7 @@ public class OreHandler implements Listener
 			int da = itemHand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("diamentowaasceza"), 0);
 
 			if (da != 1){
-				if (Math.random() < 0.7 + 0.10 * fort) {
+				if (Math.random() < baseChance + fortuneChance * fort) {
 					Bukkit.broadcastMessage(ChatColor.AQUA + "Właśnie wydobyto diament przez " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + ".");
 					player.giveExp(4 + GitmanikPlugin.rand.nextInt(4));
 					world.dropItemNaturally(block.getLocation(), new ItemStack(Material.DIAMOND, 1));
@@ -110,7 +115,7 @@ public class OreHandler implements Listener
 				else
 				{
 					player.sendMessage(ChatColor.RED + "Diament w trakcie kopania się zniszczył.");
-					if (Math.random() < 0.1) { //3% szans na drop bez fortuny, z fortuną 1 2%, z fortuną 2 1%, z fortuną 3 0%
+					if (Math.random() < fortuneChance) { //3% szans na drop bez fortuny, z fortuną 1 2%, z fortuną 2 1%, z fortuną 3 0%
 						Bukkit.broadcastMessage(ChatColor.AQUA + "Bogowie obdarzyli błogosławieństwem " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
 						world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
 					}
@@ -118,7 +123,7 @@ public class OreHandler implements Listener
 			}
 			else
 			{
-				if (Math.random() < 0.1) //czyli mamy 10% na drop
+				if (Math.random() < blessingDrop) //czyli mamy 10% na drop
 				{
 					player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
 					world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
