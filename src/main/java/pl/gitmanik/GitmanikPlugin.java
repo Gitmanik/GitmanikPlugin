@@ -36,13 +36,11 @@ public class GitmanikPlugin extends JavaPlugin {
     public static NightSkipping nightskipping = new NightSkipping();
 
     public static Random rand = new Random();
-    private String dataPath;
 
     @Override
     public void onEnable() {
         gitmanikplugin = this;
 
-        dataPath = this.getDataFolder().getPath() + "/";
         this.saveDefaultConfig();
         FileConfiguration config = this.getConfig();
 
@@ -66,7 +64,8 @@ public class GitmanikPlugin extends JavaPlugin {
             try
             {
                 GenerateCustomRecipes();
-                GenerateChainmailRecipes();
+                if (config.getBoolean("enableChainmailRecipes"))
+                    GenerateChainmailRecipes();
             }
             catch (Exception ignored){}
 
