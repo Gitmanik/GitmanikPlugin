@@ -8,7 +8,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.gitmanik.commands.GPAdmin;
+import pl.gitmanik.chatsystem.ChatSystem;
+import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.commands.Homesystem;
 import pl.gitmanik.commands.StackPotions;
 import pl.gitmanik.commands.Teleportsystem;
@@ -25,7 +26,8 @@ import java.util.Random;
 public class GitmanikPlugin extends JavaPlugin {
 
     public static GitmanikPlugin gp;
-    public static ChatHandler chathandler;
+    public static ChatSystem chathandler;
+    public GPAdmin GPAdmin;
 
     public static ArrayList<GitmanikEnchantment> customEnchantments = new ArrayList<>();
     public static HashMap<String, ItemStack> customItems = new HashMap<>();
@@ -47,7 +49,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
         RegisterCustomEnchants();
 
-        GPAdmin gpadmin = new GPAdmin();
+        GPAdmin = new GPAdmin();
 
         if (config.getBoolean("skipsystem.enable"))
         {
@@ -55,7 +57,7 @@ public class GitmanikPlugin extends JavaPlugin {
         }
         if (config.getBoolean("chatsystem.enabled"))
         {
-            chathandler = new ChatHandler();
+            chathandler = new ChatSystem();
         }
         if (config.getBoolean("stackpotions.enabled"))
         {

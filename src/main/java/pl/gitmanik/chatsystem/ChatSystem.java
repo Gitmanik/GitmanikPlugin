@@ -1,4 +1,4 @@
-package pl.gitmanik.events;
+package pl.gitmanik.chatsystem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,16 +12,17 @@ import pl.gitmanik.GitmanikPlugin;
 import java.util.HashMap;
 import java.util.List;
 
-public class ChatHandler implements Listener
+public class ChatSystem implements Listener
 {
 	private double RADIUS;
 
 	public static HashMap<Player, Boolean> spy = new HashMap<>();
 
-	public ChatHandler()
+	public ChatSystem()
 	{
 		Bukkit.getPluginManager().registerEvents(this, GitmanikPlugin.gp);
 		RADIUS = GitmanikPlugin.gp.getConfig().getDouble("chatsystem.range");
+		GitmanikPlugin.gp.GPAdmin.commands.put("spy", new Spy());
 	}
 
 	@EventHandler(ignoreCancelled = true)
