@@ -21,7 +21,7 @@ public class ChatHandler implements Listener
 	public ChatHandler()
 	{
 		Bukkit.getPluginManager().registerEvents(this, GitmanikPlugin.gp);
-		RADIUS = GitmanikPlugin.gp.getConfig().getDouble("rangechat.range");
+		RADIUS = GitmanikPlugin.gp.getConfig().getDouble("chatsystem.range");
 	}
 
 	@EventHandler(ignoreCancelled = true)

@@ -18,22 +18,20 @@ import pl.gitmanik.GitmanikPlugin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class OreHandler implements Listener
 {
-	public static final ArrayList<Material> forbiddenBlocks = new ArrayList<>();
+	public static final ArrayList<Material> allowedBlocks = new ArrayList<>();
 
 	public OreHandler()
 	{
-		for (Material m : Material.values())
+		List<String> allowedBlocksList = GitmanikPlugin.gp.getConfig().getStringList("allowed_TUNNELDIGGER_blockList");
+		for (String n : allowedBlocksList)
 		{
-			if (m.isBlock() && m.getHardness() == 0)
-				forbiddenBlocks.add(m);
+			allowedBlocks.add(Material.valueOf(n));
 		}
-
-		forbiddenBlocks.add(Material.OBSIDIAN);
 	}
-
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
@@ -46,7 +44,7 @@ public class OreHandler implements Listener
 		if (player.getGameMode() == GameMode.CREATIVE)
 			return;
 
-		if (forbiddenBlocks.contains(block.getType()))
+		if (!(allowedBlocks.contains(block.getType())))
 			return;
 
 		if (block.getType() == Material.DIAMOND_ORE)
@@ -58,9 +56,8 @@ public class OreHandler implements Listener
 		}
 
 		int mrValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
-		int daValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("diamentowaasceza"), 0);
 
-		if (mrValue > 0 || daValue > 0)
+		if (mrValue > 0)
 		{
 			Block b = block.getRelative(BlockFace.DOWN);
 			Mine(player, hand, b);
@@ -69,8 +66,9 @@ public class OreHandler implements Listener
 
 	private void Mine(Player player, ItemStack hand, Block b)
 	{
-		if (forbiddenBlocks.contains(b.getType()))
-			return;
+		if (allowedBlocks.contains(b.getType())){
+			b.breakNaturally(hand);
+		}
 
 		if (!b.getDrops(hand).isEmpty())
 		{
@@ -90,8 +88,9 @@ public class OreHandler implements Listener
 				handleDiamondBlock(player, b);
 				b.setType(Material.AIR);
 			}
+
 			else
-				b.breakNaturally(hand);
+				return;
 		}
 	}
 

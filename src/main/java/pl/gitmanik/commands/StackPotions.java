@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class StackPotions implements CommandExecutor
 {
 	//TODO: konfig
-	private static final String stackPotion = "p";
+	private static String stackPotion = GitmanikPlugin.gp.getConfig().getString("stackpotions.command");
 
 	public StackPotions()
 	{

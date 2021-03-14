@@ -21,7 +21,7 @@ public class NightSkipping implements Runnable
 
 	public NightSkipping()
 	{
-		chance = GitmanikPlugin.gp.getConfig().getDouble("nightskipping.chance");
+		chance = GitmanikPlugin.gp.getConfig().getDouble("skipsystem.chance");
 		GitmanikPlugin.gp.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 		GitmanikPlugin.gp.getServer().getScheduler().scheduleSyncRepeatingTask(GitmanikPlugin.gp, this, 0L, 60L);
 	}

@@ -14,12 +14,13 @@ import pl.gitmanik.GitmanikPlugin;
 public class Homesystem implements CommandExecutor
 {
 	//TODO: konfig
-	private static int KOSZT = 3;
+	private static int KOSZT;
 
 	private static final String sethome = "ustawdom", home = "dom";
 
 	public Homesystem()
 	{
+		KOSZT = GitmanikPlugin.gp.getConfig().getInt("homesystem.price");
 		GitmanikPlugin.gp.getCommand("dom").setExecutor(this);
 		GitmanikPlugin.gp.getCommand("ustawdom").setExecutor(this);
 	}

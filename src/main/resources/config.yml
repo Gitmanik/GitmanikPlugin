@@ -1,6 +1,8 @@
-enableCustomRecipes: true
 enableChainmailRecipes: true
 enableCobbleToGravelStonecutter: true
+
+#type block values like OBSIDIAN, BEDROCK
+allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE]
 
 customItems:
   enableMruwiKlejnot: true
@@ -9,10 +11,22 @@ customItems:
   enableBlogoslawienstwoNieumarlych: true
   enableEnderowyDepozyt: true
 
-nightskipping:
+skipsystem:
   enabled: true
   chance: 0.7
 
-rangechat:
+chatsystem:
   enabled: true
   range: 200
+
+homesystem:
+  enabled: true
+  koszt: 3
+
+teleportsystem:
+  enabled: true
+  koszt: 5
+
+stackpotion:
+  enabled: true
+  command: p

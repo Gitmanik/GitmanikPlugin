@@ -48,9 +48,27 @@ public class GitmanikPlugin extends JavaPlugin {
         RegisterCustomEnchants();
 
         GPAdmin gpadmin = new GPAdmin();
-        StackPotions stackpotions = new StackPotions();
-        Homesystem homesystem = new Homesystem();
-        Teleportsystem teleportsystem = new Teleportsystem();
+
+        if (config.getBoolean("skipsystem.enable"))
+        {
+            nightskipping = new NightSkipping();
+        }
+        if (config.getBoolean("chatsystem.enabled"))
+        {
+            chathandler = new ChatHandler();
+        }
+        if (config.getBoolean("stackpotions.enabled"))
+        {
+            StackPotions stackpotions = new StackPotions();
+        }
+        if (config.getBoolean("homesystem.enabled"))
+        {
+            Homesystem homesystem = new Homesystem();
+        }
+        if (config.getBoolean("teleportsystem.enabled"))
+        {
+            Teleportsystem teleportsystem = new Teleportsystem();
+        }
 
         if (config.getBoolean("enableCompressedItems"))
         {
@@ -73,16 +91,6 @@ public class GitmanikPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
-
-        if (config.getBoolean("nightskipping.enable"))
-        {
-            nightskipping = new NightSkipping();
-        }
-
-        if (config.getBoolean("rangechat.enabled"))
-        {
-            chathandler = new ChatHandler();
-        }
 
         getLogger().info("Running.");
 

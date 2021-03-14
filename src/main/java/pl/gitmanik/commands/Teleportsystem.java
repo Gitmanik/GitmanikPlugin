@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class Teleportsystem implements CommandExecutor
 {
 	//TODO: konfig
-	public static final int KOSZT = 5;
+	public static int KOSZT;
 
 	private static final String requestTelepost = "gtpa", acceptTeleport = "gtpaccept";
 
@@ -24,6 +24,7 @@ public class Teleportsystem implements CommandExecutor
 
 	public Teleportsystem()
 	{
+		KOSZT = GitmanikPlugin.gp.getConfig().getInt("teleportsystem.price");
 		GitmanikPlugin.gp.getCommand("gtpa").setExecutor(this);
 		GitmanikPlugin.gp.getCommand("gtpaccept").setExecutor(this);
 	}
