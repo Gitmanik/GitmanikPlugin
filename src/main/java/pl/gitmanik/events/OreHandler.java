@@ -43,6 +43,9 @@ public class OreHandler implements Listener
 		PlayerInventory inv = player.getInventory();
 		ItemStack hand = inv.getItemInMainHand();
 
+		if (player.getGameMode() == GameMode.CREATIVE)
+			return;
+
 		if (forbiddenBlocks.contains(block.getType()))
 			return;
 
