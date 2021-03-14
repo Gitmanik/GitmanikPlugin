@@ -1,5 +1,6 @@
 package pl.gitmanik.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,14 +14,14 @@ import java.util.List;
 
 public class ChatHandler implements Listener
 {
-	private final GitmanikPlugin plugin;
-	private final double RADIUS = 200.0;
+	private double RADIUS;
 
 	public static HashMap<Player, Boolean> spy = new HashMap<>();
 
-	public ChatHandler(GitmanikPlugin plugin)
+	public ChatHandler()
 	{
-		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, GitmanikPlugin.gp);
+		RADIUS = GitmanikPlugin.gp.getConfig().getDouble("rangechat.range");
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -35,7 +36,7 @@ public class ChatHandler implements Listener
 
 		Location l = sender.getLocation();
 
-		plugin.getLogger().info( String.format("§6%s,%s,%s§r [%s§r] §e%s§r: §f%s", l.getBlockX(), l.getBlockY(), l.getBlockZ(), global ? "§aGlobal" : "§9Local", sender.getDisplayName(), message.replace("%", "%%")));
+		GitmanikPlugin.gp.getLogger().info( String.format("§6%s,%s,%s§r [%s§r] §e%s§r: §f%s", l.getBlockX(), l.getBlockY(), l.getBlockZ(), global ? "§aGlobal" : "§9Local", sender.getDisplayName(), message.replace("%", "%%")));
 		if (global)
 		{
 			String target = ChatColor.GREEN + "[GLOBALNY] " + ChatColor.YELLOW + sender.getDisplayName() + ": " + ChatColor.WHITE + message;

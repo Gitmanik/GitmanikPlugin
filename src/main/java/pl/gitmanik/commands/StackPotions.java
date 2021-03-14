@@ -19,7 +19,7 @@ public class StackPotions implements CommandExecutor
 
 	public StackPotions()
 	{
-		GitmanikPlugin.gitmanikplugin.getCommand(stackPotion).setExecutor(this);
+		GitmanikPlugin.gp.getCommand(stackPotion).setExecutor(this);
 	}
 
 

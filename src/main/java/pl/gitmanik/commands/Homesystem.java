@@ -20,8 +20,8 @@ public class Homesystem implements CommandExecutor
 
 	public Homesystem()
 	{
-		GitmanikPlugin.gitmanikplugin.getCommand("dom").setExecutor(this);
-		GitmanikPlugin.gitmanikplugin.getCommand("ustawdom").setExecutor(this);
+		GitmanikPlugin.gp.getCommand("dom").setExecutor(this);
+		GitmanikPlugin.gp.getCommand("ustawdom").setExecutor(this);
 	}
 
 	@Override
@@ -34,14 +34,14 @@ public class Homesystem implements CommandExecutor
 			double tmpX = tmploc.getX();
 			double tmpY = tmploc.getY();
 			double tmpZ = tmploc.getZ();
-			GitmanikPlugin.gitmanikplugin.getConfig().set("homes." + player.getUniqueId(), player.getWorld().getName() + "," + tmpX + "," + tmpY + "," + tmpZ);
-			GitmanikPlugin.gitmanikplugin.saveConfig();
+			GitmanikPlugin.gp.getConfig().set("homes." + player.getUniqueId(), player.getWorld().getName() + "," + tmpX + "," + tmpY + "," + tmpZ);
+			GitmanikPlugin.gp.saveConfig();
 			player.sendMessage(ChatColor.GOLD + "Ustawiono dom!");
 		}
 
 		if (label.equalsIgnoreCase(home))
 		{
-			if (GitmanikPlugin.gitmanikplugin.getConfig().contains("homes." + player.getUniqueId()))
+			if (GitmanikPlugin.gp.getConfig().contains("homes." + player.getUniqueId()))
 			{
 				if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
 				{
@@ -51,7 +51,7 @@ public class Homesystem implements CommandExecutor
 
 				player.getInventory().removeItem(new ItemStack(Material.DIAMOND, KOSZT));
 
-				String[] arg = GitmanikPlugin.gitmanikplugin.getConfig().getString("homes." + player.getUniqueId()).split(",");
+				String[] arg = GitmanikPlugin.gp.getConfig().getString("homes." + player.getUniqueId()).split(",");
 				double[] parsed = new double[3];
 				for (int a = 0; a < 3; a++)
 				{

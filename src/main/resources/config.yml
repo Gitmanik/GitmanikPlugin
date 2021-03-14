@@ -1,2 +1,18 @@
 enableCustomRecipes: true
 enableChainmailRecipes: true
+enableCobbleToGravelStonecutter: true
+
+customItems:
+  enableMruwiKlejnot: true
+  enableMruwiKilof: true
+  enableMagicznaOrchidea: true
+  enableBlogoslawienstwoNieumarlych: true
+  enableEnderowyDepozyt: true
+
+nightskipping:
+  enabled: true
+  chance: 0.7
+
+rangechat:
+  enabled: true
+  range: 200

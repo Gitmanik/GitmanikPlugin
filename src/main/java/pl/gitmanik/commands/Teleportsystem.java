@@ -24,8 +24,8 @@ public class Teleportsystem implements CommandExecutor
 
 	public Teleportsystem()
 	{
-		GitmanikPlugin.gitmanikplugin.getCommand("gtpa").setExecutor(this);
-		GitmanikPlugin.gitmanikplugin.getCommand("gtpaccept").setExecutor(this);
+		GitmanikPlugin.gp.getCommand("gtpa").setExecutor(this);
+		GitmanikPlugin.gp.getCommand("gtpaccept").setExecutor(this);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class Teleportsystem implements CommandExecutor
 				tasks.remove(player);
 			}
 
-			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gitmanikplugin, () ->
+			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gp, () ->
 			{
 				sender.sendMessage("Prośba przedawniona.");
 				tpa.remove(target);

@@ -14,7 +14,7 @@ public class GitmanikEnchantment extends Enchantment
 	private String name;
 	public GitmanikEnchantment(String key, String name)
 	{
-		super(new NamespacedKey(GitmanikPlugin.gitmanikplugin, key));
+		super(new NamespacedKey(GitmanikPlugin.gp, key));
 		this.name = name;
 	}
 

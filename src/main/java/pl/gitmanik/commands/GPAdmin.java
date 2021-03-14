@@ -28,8 +28,8 @@ public class GPAdmin implements CommandExecutor, TabCompleter
 
 	public GPAdmin()
 	{
-		GitmanikPlugin.gitmanikplugin.getCommand(gpadmin).setExecutor(this);
-		GitmanikPlugin.gitmanikplugin.getCommand(gpadmin).setTabCompleter(this);
+		GitmanikPlugin.gp.getCommand(gpadmin).setExecutor(this);
+		GitmanikPlugin.gp.getCommand(gpadmin).setTabCompleter(this);
 	}
 
 	//TODO: ja jebie to jest okropne
