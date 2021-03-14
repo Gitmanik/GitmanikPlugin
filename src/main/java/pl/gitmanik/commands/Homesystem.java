@@ -13,13 +13,22 @@ import pl.gitmanik.GitmanikPlugin;
 
 public class Homesystem implements CommandExecutor
 {
+	//TODO: konfig
 	private static int KOSZT = 3;
+
+	private static final String sethome = "ustawdom", home = "dom";
+
+	public Homesystem()
+	{
+		GitmanikPlugin.gitmanikplugin.getCommand("dom").setExecutor(this);
+		GitmanikPlugin.gitmanikplugin.getCommand("ustawdom").setExecutor(this);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] strings)
 	{
 		Player player = (Player) sender;
-		if (label.equalsIgnoreCase("ustawdom"))
+		if (label.equalsIgnoreCase(sethome))
 		{
 			Location tmploc = player.getLocation();
 			double tmpX = tmploc.getX();
@@ -30,13 +39,13 @@ public class Homesystem implements CommandExecutor
 			player.sendMessage(ChatColor.GOLD + "Ustawiono dom!");
 		}
 
-		if (label.equalsIgnoreCase("dom"))
+		if (label.equalsIgnoreCase(home))
 		{
 			if (GitmanikPlugin.gitmanikplugin.getConfig().contains("homes." + player.getUniqueId()))
 			{
 				if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
 				{
-					player.sendMessage(ChatColor.RED + "Nie stac cie na /dom! Koszt: " + KOSZT + " diament");
+					player.sendMessage(ChatColor.RED + "Nie stac cie na /" + home +"! Koszt: " + KOSZT + " diament");
 					return true;
 				}
 
@@ -54,7 +63,7 @@ public class Homesystem implements CommandExecutor
 				player.sendMessage(ChatColor.GOLD + "Teleportowano do domu!");
 			} else
 			{
-				player.sendMessage(ChatColor.GOLD + "Najpierw ustaw dom! /ustawdom");
+				player.sendMessage(ChatColor.GOLD + "Najpierw ustaw dom! /" + sethome);
 			}
 		}
 		return true;

@@ -23,6 +23,16 @@ import java.util.List;
 
 public class GPAdmin implements CommandExecutor, TabCompleter
 {
+	//TODO: konfig
+	private static final String gpadmin = "gpadmin";
+
+	public GPAdmin()
+	{
+		GitmanikPlugin.gitmanikplugin.getCommand(gpadmin).setExecutor(this);
+		GitmanikPlugin.gitmanikplugin.getCommand(gpadmin).setTabCompleter(this);
+	}
+
+	//TODO: ja jebie to jest okropne
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
 	{

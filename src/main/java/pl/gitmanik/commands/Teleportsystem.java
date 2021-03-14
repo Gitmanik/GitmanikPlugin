@@ -14,15 +14,25 @@ import java.util.HashMap;
 
 public class Teleportsystem implements CommandExecutor
 {
+	//TODO: konfig
 	public static final int KOSZT = 5;
+
+	private static final String requestTelepost = "gtpa", acceptTeleport = "gtpaccept";
+
 	public HashMap<Player, Player> tpa = new HashMap<>();
 	public HashMap<Player, Integer> tasks = new HashMap<>();
+
+	public Teleportsystem()
+	{
+		GitmanikPlugin.gitmanikplugin.getCommand("gtpa").setExecutor(this);
+		GitmanikPlugin.gitmanikplugin.getCommand("gtpaccept").setExecutor(this);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
 		Player player = (Player) sender;
-		if (label.equalsIgnoreCase("gtpa"))
+		if (label.equalsIgnoreCase(requestTelepost))
 		{
 			if (args.length == 0)
 				return false;
@@ -31,7 +41,7 @@ public class Teleportsystem implements CommandExecutor
 
 			if (target == null)
 			{
-				player.sendMessage(ChatColor.RED + "Nie znaleziono gracza o nicku : " + args[0]);
+				player.sendMessage(String.format("%sNie znaleziono gracza o nicku: %s", ChatColor.RED, args[0]));
 				return true;
 			}
 
@@ -41,16 +51,16 @@ public class Teleportsystem implements CommandExecutor
 				return true;
 			}
 
-			if (!player.getInventory().contains(Material.DIAMOND, 5))
+			if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
 			{
-				player.sendMessage(ChatColor.RED + "Nie stac cie na /gtpa! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
+				player.sendMessage(String.format("%s Nie stac cie na /%s! Koszt: %s diament(ów) (pobierany podczas teleportowania)", ChatColor.RED, requestTelepost, KOSZT));
 				return true;
 			}
 
 			tpa.put(target,player);
 
 			target.sendMessage(ChatColor.GOLD + player.getDisplayName() + ChatColor.WHITE + " chce się do ciebie teleportować.");
-			target.sendMessage(ChatColor.WHITE + "Aby zaakceptować wpisz " + ChatColor.GOLD + "/gtpaccept");
+			target.sendMessage(ChatColor.WHITE + "Aby zaakceptować wpisz " + ChatColor.GOLD + "/" + acceptTeleport);
 
 			sender.sendMessage(ChatColor.WHITE + "Wysłano prośbę do gracza " + ChatColor.GOLD + target.getDisplayName());
 
@@ -73,7 +83,7 @@ public class Teleportsystem implements CommandExecutor
 
 		}
 
-		if (label.equalsIgnoreCase("gtpaccept"))
+		if (label.equalsIgnoreCase(acceptTeleport))
 		{
 			if (!tpa.containsKey(player))
 			{
@@ -86,9 +96,9 @@ public class Teleportsystem implements CommandExecutor
 				player.sendMessage(ChatColor.RED + "Gracz jest już offline :(");
 				return true;
 			}
-			if (!base.getInventory().contains(Material.DIAMOND, 5))
+			if (!base.getInventory().contains(Material.DIAMOND, KOSZT))
 			{
-				base.sendMessage(ChatColor.RED + "Nie stac cie na /gtpa! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
+				base.sendMessage(ChatColor.RED + "Nie stac cie na /" + requestTelepost +"! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
 				player.sendMessage(ChatColor.RED + "Gracza nie było stać na teleportowanie się do Ciebie.");
 
 				return true;

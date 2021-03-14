@@ -14,7 +14,6 @@ import pl.gitmanik.commands.Teleportsystem;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
-import pl.gitmanik.events.DeathHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 import pl.gitmanik.nightskip.NightSkipping;
 import pl.gitmanik.nightskip.VoteSkipNightHandler;
@@ -33,18 +32,27 @@ public class GitmanikPlugin extends JavaPlugin {
 
     public static HashMap<String, ItemStack> compressedItems = new HashMap<>();
 
-
     public static NightSkipping nightskipping = new NightSkipping();
 
     public static Random rand = new Random();
+    private String dataPath;
 
     @Override
     public void onEnable() {
         gitmanikplugin = this;
 
+        dataPath = this.getDataFolder().getPath() + "/";
+
         RegisterCustomEnchants();
 
-        RegisterCommands();
+        //TODO: Dodac w konfig YAML wyłącznik danej funkcjonalności.
+        GPAdmin gpadmin = new GPAdmin();
+        StackPotions stackpotions = new StackPotions();
+        Homesystem homesystem = new Homesystem();
+        Teleportsystem teleportsystem = new Teleportsystem();
+
+        this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
+
         GenerateCustomItemStacks();
 
         GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
@@ -72,32 +80,6 @@ public class GitmanikPlugin extends JavaPlugin {
 
 
         getLogger().info("Running.");
-
-    }
-
-    private void RegisterCommands()
-    {
-        //Admin
-
-        GPAdmin a = new GPAdmin();
-        this.getCommand("gpadmin").setExecutor(a);
-        this.getCommand("gpadmin").setTabCompleter(a);
-
-
-        //QoL
-        this.getCommand("p").setExecutor(new StackPotions());
-
-        //Home system
-        Homesystem homesystem = new Homesystem();
-        this.getCommand("dom").setExecutor(homesystem);
-        this.getCommand("ustawdom").setExecutor(homesystem);
-
-        Teleportsystem teleportsystem = new Teleportsystem();
-        this.getCommand("gtpa").setExecutor(teleportsystem);
-        this.getCommand("gtpaccept").setExecutor(teleportsystem);
-
-        //Helper
-        this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 
     }
 
