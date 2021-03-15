@@ -15,9 +15,9 @@ import java.util.HashMap;
 public class Teleportsystem implements CommandExecutor
 {
 	//TODO: konfig
-	public static int KOSZT;
-
+	private static int KOSZT;
 	private static final String requestTelepost = "gtpa", acceptTeleport = "gtpaccept";
+	Material itemTeleportsystem = Material.valueOf(GitmanikPlugin.gp.getConfig().getString("teleportsystem.material"));
 
 	public HashMap<Player, Player> tpa = new HashMap<>();
 	public HashMap<Player, Integer> tasks = new HashMap<>();
@@ -35,6 +35,7 @@ public class Teleportsystem implements CommandExecutor
 		Player player = (Player) sender;
 		if (label.equalsIgnoreCase(requestTelepost))
 		{
+
 			if (args.length == 0)
 				return false;
 
@@ -52,7 +53,7 @@ public class Teleportsystem implements CommandExecutor
 				return true;
 			}
 
-			if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
+			if (!player.getInventory().contains(itemTeleportsystem, KOSZT))
 			{
 				player.sendMessage(String.format("%s Nie stac cie na /%s! Koszt: %s diament(ów) (pobierany podczas teleportowania)", ChatColor.RED, requestTelepost, KOSZT));
 				return true;
@@ -97,7 +98,7 @@ public class Teleportsystem implements CommandExecutor
 				player.sendMessage(ChatColor.RED + "Gracz jest już offline :(");
 				return true;
 			}
-			if (!base.getInventory().contains(Material.DIAMOND, KOSZT))
+			if (!base.getInventory().contains(itemTeleportsystem, KOSZT))
 			{
 				base.sendMessage(ChatColor.RED + "Nie stac cie na /" + requestTelepost +"! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
 				player.sendMessage(ChatColor.RED + "Gracza nie było stać na teleportowanie się do Ciebie.");
@@ -105,7 +106,7 @@ public class Teleportsystem implements CommandExecutor
 				return true;
 			}
 			base.teleport(player);
-			base.getInventory().removeItem(new ItemStack(Material.DIAMOND, KOSZT));
+			base.getInventory().removeItem(new ItemStack(itemTeleportsystem, KOSZT));
 			player.sendMessage(ChatColor.WHITE + "Przeteleportowano " + ChatColor.GOLD + base.getDisplayName() + ChatColor.WHITE + " do Ciebie.");
 
 			if (tasks.containsKey(base))

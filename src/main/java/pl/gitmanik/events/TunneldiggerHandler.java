@@ -28,7 +28,7 @@ public class TunneldiggerHandler implements Listener
 
 	private final Enchantment tunnelDigger = EnchantmentHelper.GetEnchantment("tunneldigger");
 	private final Enchantment diamentowaAsceza = EnchantmentHelper.GetEnchantment("diamentowaasceza");
-	private final ItemStack bozek = GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych");
+	private final ItemStack blessing = GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych");
 
 	public TunneldiggerHandler()
 	{
@@ -120,7 +120,7 @@ public class TunneldiggerHandler implements Listener
 					player.sendMessage(ChatColor.RED + "Diament w trakcie kopania się zniszczył.");
 					if (Math.random() < fortuneChance) { //3% szans na drop bez fortuny, z fortuną 1 2%, z fortuną 2 1%, z fortuną 3 0%
 						Bukkit.broadcastMessage(ChatColor.AQUA + "Bogowie obdarzyli błogosławieństwem " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
-						world.dropItemNaturally(block.getLocation(), bozek);
+						world.dropItemNaturally(block.getLocation(), blessing);
 					}
 				}
 			}
@@ -129,7 +129,7 @@ public class TunneldiggerHandler implements Listener
 				if (Math.random() < blessingDrop) //czyli mamy 10% na drop
 				{
 					player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
-					world.dropItemNaturally(block.getLocation(), bozek);
+					world.dropItemNaturally(block.getLocation(), blessing);
 				}
 			}
 		}

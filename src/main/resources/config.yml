@@ -34,10 +34,12 @@ chatsystem:
 
 homesystem:
   enabled: true
+  material: DIAMOND
   price: 3
 
 teleportsystem:
   enabled: true
+  material: DIAMOND
   price: 5
 
 stackpotion:

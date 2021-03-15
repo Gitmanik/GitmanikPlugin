@@ -15,8 +15,8 @@ public class Homesystem implements CommandExecutor
 {
 	//TODO: konfig
 	private static int KOSZT;
-
 	private static final String sethome = "ustawdom", home = "dom";
+	Material itemHomesystem = Material.valueOf(GitmanikPlugin.gp.getConfig().getString("homesystem.material"));
 
 	public Homesystem()
 	{
@@ -44,13 +44,13 @@ public class Homesystem implements CommandExecutor
 		{
 			if (GitmanikPlugin.gp.getConfig().contains("homes." + player.getUniqueId()))
 			{
-				if (!player.getInventory().contains(Material.DIAMOND, KOSZT))
+				if (!player.getInventory().contains(itemHomesystem, KOSZT))
 				{
 					player.sendMessage(ChatColor.RED + "Nie stac cie na /" + home +"! Koszt: " + KOSZT + " diament");
 					return true;
 				}
 
-				player.getInventory().removeItem(new ItemStack(Material.DIAMOND, KOSZT));
+				player.getInventory().removeItem(new ItemStack(itemHomesystem, KOSZT));
 
 				String[] arg = GitmanikPlugin.gp.getConfig().getString("homes." + player.getUniqueId()).split(",");
 				double[] parsed = new double[3];
