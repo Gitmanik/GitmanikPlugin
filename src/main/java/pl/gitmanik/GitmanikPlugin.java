@@ -81,16 +81,16 @@ public class GitmanikPlugin extends JavaPlugin {
 
         try
         {
-            GenerateCustomItems();
+            if (config.getBoolean("customItems.enable"))
+                LoadCustomItems();
+
             if (config.getBoolean("enableChainmailRecipes"))
                 GenerateChainmailRecipes();
         }
         catch (Exception ignored){}
 
-        Bukkit.getPluginManager().registerEvents(new OreHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DeathHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
+
+
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
 
@@ -154,7 +154,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
     }
 
-    private void GenerateCustomItems()
+    private void LoadCustomItems()
     {
         if (config.getBoolean("customItems.enableBlogoslawienstwoNieumarlych"))
         {
@@ -164,6 +164,8 @@ public class GitmanikPlugin extends JavaPlugin {
             blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
             EnchantmentHelper.AddEnchantWithLore(blogoslawienstwoNieumarlych, EnchantmentHelper.GetEnchantment("przychylnosc"), 1);
             customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
+
+            Bukkit.getPluginManager().registerEvents(new BozekHandler(), this);
         }
 
 
@@ -197,6 +199,8 @@ public class GitmanikPlugin extends JavaPlugin {
             mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
             mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
             Bukkit.addRecipe(mruwiRecip);
+
+            Bukkit.getPluginManager().registerEvents(new TunneldiggerHandler(), this);
         }
 
         if (config.getBoolean("customItems.enableMagicznaOrchidea"))
@@ -215,6 +219,8 @@ public class GitmanikPlugin extends JavaPlugin {
             orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
             orchidearecipe.setIngredient('H', Material.IRON_HOE);
             Bukkit.addRecipe(orchidearecipe);
+
+            Bukkit.getPluginManager().registerEvents(new FarmersHandHandler(), this);
         }
 
         if (config.getBoolean("customItems.enableEnderowyDepozyt"))
@@ -233,6 +239,8 @@ public class GitmanikPlugin extends JavaPlugin {
             depo.setIngredient('G', Material.GLOWSTONE_DUST);
             depo.setIngredient('N', Material.NETHERRACK);
             Bukkit.addRecipe(depo);
+
+            Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
         }
         if (config.getBoolean("enableCobbleToGravelStonecutter"))
         {

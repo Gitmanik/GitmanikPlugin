@@ -14,14 +14,12 @@ import java.util.stream.Collectors;
 
 public class StackPotions implements CommandExecutor
 {
-	//TODO: konfig
-	private static String stackPotion = GitmanikPlugin.gp.getConfig().getString("stackpotions.command");
+	private static String stackPotion = "p";
 
 	public StackPotions()
 	{
 		GitmanikPlugin.gp.getCommand(stackPotion).setExecutor(this);
 	}
-
 
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)

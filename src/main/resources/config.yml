@@ -1,14 +1,16 @@
 enableChainmailRecipes: true
 enableCobbleToGravelStonecutter: true
+
+#Material enum values like OBSIDIAN, BEDROCK
+allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE, DIORITE, ANDESITE, GRANITE]
+
 customItems:
+  enable: true
   enableMruwiKlejnot: true
   enableMruwiKilof: true
   enableMagicznaOrchidea: true
   enableBlogoslawienstwoNieumarlych: true
   enableEnderowyDepozyt: true
-
-#type block values like OBSIDIAN, BEDROCK
-allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE]
 
 #USE ONLY FLOATED NUMBERS THERE
 #baseDiamondDrop chance fe. 0.5 = 50%
@@ -32,12 +34,11 @@ chatsystem:
 
 homesystem:
   enabled: true
-  koszt: 3
+  price: 3
 
 teleportsystem:
   enabled: true
-  koszt: 5
+  price: 5
 
 stackpotion:
   enabled: true
-  command: p

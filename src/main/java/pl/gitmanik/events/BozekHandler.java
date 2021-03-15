@@ -15,18 +15,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DeathHandler implements Listener
+public class BozekHandler implements Listener
 {
+	private Enchantment przychylnosc = EnchantmentHelper.GetEnchantment("przychylnosc");
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onEntityDeath(PlayerDeathEvent e)
+	public void onPlayerDeath(PlayerDeathEvent e)
 	{
 		Player player = e.getEntity();
 
-		List<ItemStack> bozekFinder = Arrays.stream(player.getInventory().getContents()).filter(xx -> (xx != null && xx.getType() == Material.EMERALD)).collect(Collectors.toList());
+		List<ItemStack> bozekFinder = Arrays.stream(player.getInventory().getContents()).filter(candidate -> candidate.getType() == Material.EMERALD).collect(Collectors.toList());
 		for (ItemStack item : bozekFinder)
 		{
-			if (item.getEnchantmentLevel(EnchantmentHelper.GetEnchantment("przychylnosc")) == 1 || item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 10)
+			if (item.getEnchantmentLevel(przychylnosc) == 1 || item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 10)
 			{
 				item.setAmount(item.getAmount() - 1);
 				e.setKeepInventory(true);

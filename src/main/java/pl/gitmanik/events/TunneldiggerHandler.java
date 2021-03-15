@@ -2,7 +2,6 @@ package pl.gitmanik.events;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,14 +19,18 @@ import pl.gitmanik.enchants.EnchantmentHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OreHandler implements Listener
+public class TunneldiggerHandler implements Listener
 {
-	public static final ArrayList<Material> allowedBlocks = new ArrayList<>();
-	public double baseChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.baseDropChance");
-	public double fortuneChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.fortuneDropChance");
-	public double blessingDrop = GitmanikPlugin.gp.getConfig().getDouble("blessingsystem.drop");
+	private final ArrayList<Material> allowedBlocks = new ArrayList<>();
+	private final double baseChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.baseDropChance");
+	private final double fortuneChance = GitmanikPlugin.gp.getConfig().getDouble("diamondsystem.fortuneDropChance");
+	private final double blessingDrop = GitmanikPlugin.gp.getConfig().getDouble("blessingsystem.drop");
 
-	public OreHandler()
+	private final Enchantment tunnelDigger = EnchantmentHelper.GetEnchantment("tunneldigger");
+	private final Enchantment diamentowaAsceza = EnchantmentHelper.GetEnchantment("diamentowaasceza");
+	private final ItemStack bozek = GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych");
+
+	public TunneldiggerHandler()
 	{
 		List<String> allowedBlocksList = GitmanikPlugin.gp.getConfig().getStringList("allowed_TUNNELDIGGER_blockList");
 		for (String n : allowedBlocksList)
@@ -58,7 +61,7 @@ public class OreHandler implements Listener
 			state.update();
 		}
 
-		int mrValue = hand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("tunneldigger"), 0);
+		int mrValue = hand.getEnchantments().getOrDefault(tunnelDigger, 0);
 
 		if (mrValue > 0) {
 			int blockOffset = player.getLocation().getBlockY() - block.getY();
@@ -101,10 +104,10 @@ public class OreHandler implements Listener
 		if (player.getGameMode() != GameMode.CREATIVE && block.getType() == Material.DIAMOND_ORE) {
 
 			PlayerInventory inv = player.getInventory();
-			ItemStack itemHand = new ItemStack(inv.getItemInMainHand());
+			ItemStack itemHand = inv.getItemInMainHand();
 			World world = player.getWorld();
 			int fort = itemHand.getEnchantments().getOrDefault(Enchantment.LOOT_BONUS_BLOCKS, 0);
-			int da = itemHand.getEnchantments().getOrDefault(EnchantmentHelper.GetEnchantment("diamentowaasceza"), 0);
+			int da = itemHand.getEnchantments().getOrDefault(diamentowaAsceza, 0);
 
 			if (da != 1){
 				if (Math.random() < baseChance + fortuneChance * fort) {
@@ -117,7 +120,7 @@ public class OreHandler implements Listener
 					player.sendMessage(ChatColor.RED + "Diament w trakcie kopania się zniszczył.");
 					if (Math.random() < fortuneChance) { //3% szans na drop bez fortuny, z fortuną 1 2%, z fortuną 2 1%, z fortuną 3 0%
 						Bukkit.broadcastMessage(ChatColor.AQUA + "Bogowie obdarzyli błogosławieństwem " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
-						world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
+						world.dropItemNaturally(block.getLocation(), bozek);
 					}
 				}
 			}
@@ -126,7 +129,7 @@ public class OreHandler implements Listener
 				if (Math.random() < blessingDrop) //czyli mamy 10% na drop
 				{
 					player.sendMessage(ChatColor.AQUA + "Bogowie wynagrodzili ascezę " + ChatColor.GOLD + player.getName() + ChatColor.AQUA + "!");
-					world.dropItemNaturally(block.getLocation(), GitmanikPlugin.customItems.get("blogoslawienstwo-nieumarlych"));
+					world.dropItemNaturally(block.getLocation(), bozek);
 				}
 			}
 		}
