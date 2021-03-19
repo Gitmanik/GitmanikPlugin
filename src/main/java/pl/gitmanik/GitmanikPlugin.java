@@ -93,7 +93,11 @@ public class GitmanikPlugin extends JavaPlugin {
         }
         catch (Exception ignored){}
 
+        if (config.getBoolean("diamondsystem.enable"))
+            Bukkit.getPluginManager().registerEvents(new DiamondSystem(), this);
 
+        if (config.getBoolean("tunneldigger.enable"))
+            Bukkit.getPluginManager().registerEvents(new TunneldiggerHandler(), this);
 
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
@@ -203,8 +207,6 @@ public class GitmanikPlugin extends JavaPlugin {
             mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
             mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
             Bukkit.addRecipe(mruwiRecip);
-
-            Bukkit.getPluginManager().registerEvents(new TunneldiggerHandler(), this);
         }
 
         if (config.getBoolean("customItems.enableMagicznaOrchidea"))

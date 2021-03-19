@@ -2,7 +2,7 @@ enableChainmailRecipes: true
 enableCobbleToGravelStonecutter: true
 
 #Material enum values like OBSIDIAN, BEDROCK
-allowed_TUNNELDIGGER_blockList: [STONE, COBBLESTONE, DIORITE, ANDESITE, GRANITE]
+allowed_TUNNELDIGGER_blockList: [STONE, DIORITE, ANDESITE, GRANITE]
 
 customItems:
   enable: true
@@ -18,11 +18,15 @@ customItems:
 #for example if baseDiamondDrop = 0.5 and fortuneDiamondDrop = 0.1
 #in this example fortune 3 pickaxe there is 80% dropchance of diamond
 diamondsystem:
+  enable: true
   baseDropChance: 0.7
   fortuneDropChance: 0.1
 
 blessingsystem:
   drop: 0.1
+
+tunneldigger:
+  enable: true
 
 skipsystem:
   enabled: true
