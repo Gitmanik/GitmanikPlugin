@@ -42,6 +42,12 @@ public class FarmersHandHandler implements Listener
 			return;
 		}
 
+		if (secHandItem.getEnchantmentLevel(rekaFarmera) == 1 && !(placedBlock.getBlockData() instanceof Ageable))
+		{
+			event.setCancelled(true);
+			return;
+		}
+
 		if (secHandItem.getEnchantmentLevel(rekaFarmera) == 1 && placedBlock.getBlockData() instanceof Ageable)
 		{
 			mainHandItem.setAmount(mainHandItem.getAmount() - 1); // Pierwszy położony seed (wywolal event)
