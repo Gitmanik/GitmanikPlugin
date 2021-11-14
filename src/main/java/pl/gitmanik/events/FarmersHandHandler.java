@@ -63,9 +63,7 @@ public class FarmersHandHandler implements Listener
 
 					if (Plant(placedBlock.getLocation().add(x,0,z).getBlock(), placedBlock.getType()))
 					{
-						boolean cancel = false;
-						if (!GitmanikDurability.EditDurability(player, secHandItem, -1))
-							cancel = true;
+						boolean cancel = !GitmanikDurability.EditDurability(player, secHandItem, -1);
 
 						if (mainHandItem.getAmount() == 1)
 						{

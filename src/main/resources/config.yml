@@ -12,6 +12,16 @@ customItems:
   enableBlogoslawienstwoNieumarlych: true
   enableEnderowyDepozyt: true
 
+#USE ONLY FLOATED NUMBERS THERE
+#baseDiamondDrop chance fe. 0.5 = 50%
+#fortuneDiamondDrop is additional dropchance per fortune lvl added to (100%-baseDiamondDrop)
+#for example if baseDiamondDrop = 0.5 and fortuneDiamondDrop = 0.1
+#in this example fortune 3 pickaxe there is 80% dropchance of diamond
+diamondsystem:
+  enable: true
+  baseDropChance: 0.7
+  fortuneDropChance: 0.1
+
 blessingsystem:
   drop: 0.1
 

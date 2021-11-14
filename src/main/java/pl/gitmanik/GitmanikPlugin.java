@@ -9,10 +9,10 @@ import org.bukkit.inventory.StonecuttingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.gitmanik.chatsystem.ChatSystem;
+import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.commands.Homesystem;
 import pl.gitmanik.commands.StackPotions;
 import pl.gitmanik.commands.Teleportsystem;
-import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
@@ -87,6 +87,9 @@ public class GitmanikPlugin extends JavaPlugin {
                 GenerateChainmailRecipes();
         }
         catch (Exception ignored){}
+
+        if (config.getBoolean("diamondsystem.enable"))
+            Bukkit.getPluginManager().registerEvents(new DiamondSystem(), this);
 
         if (config.getBoolean("tunneldigger.enable"))
             Bukkit.getPluginManager().registerEvents(new TunneldiggerHandler(), this);
