@@ -65,10 +65,12 @@ public class GitmanikPlugin extends JavaPlugin {
         if (config.getBoolean("homesystem.enabled"))
         {
             Homesystem homesystem = new Homesystem();
+            Bukkit.getPluginManager().registerEvents(homesystem, this);
         }
         if (config.getBoolean("teleportsystem.enabled"))
         {
             Teleportsystem teleportsystem = new Teleportsystem();
+            Bukkit.getPluginManager().registerEvents(teleportsystem, this);
         }
 
         if (config.getBoolean("enableCompressedItems"))
@@ -230,7 +232,7 @@ public class GitmanikPlugin extends JavaPlugin {
             ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
             epozyt.setDisplayName("§dEnderowy Depozyt");
             mrocznyDepozyt.setItemMeta(epozyt);
-            mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null???
+            mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null??? zebys sie pytal smiedzelu
             GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
             customItems.put("enderowy_depozyt", mrocznyDepozyt);
 

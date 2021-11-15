@@ -40,11 +40,13 @@ homesystem:
   enabled: true
   material: DIAMOND
   price: 3
+  delay: 30
 
 teleportsystem:
   enabled: true
   material: DIAMOND
   price: 5
+  delay: 30
 
 stackpotion:
   enabled: true
