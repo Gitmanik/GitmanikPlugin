@@ -1,6 +1,6 @@
 enableChainmailRecipes: true
 enableCobbleToGravelStonecutter: true
-
+enableCompressedItems: true
 #Material enum values like OBSIDIAN, BEDROCK
 allowed_TUNNELDIGGER_blockList: [STONE, DIORITE, ANDESITE, GRANITE]
 
