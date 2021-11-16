@@ -41,7 +41,7 @@ public class CraftingHandler implements Listener
 				if (result.equals(mruwiKilof))
 				{
 					for(ItemStack item : inv.getMatrix()){
-						if (item.getType() == Material.LAPIS_BLOCK && !item.equals(mruwiKlejnot)){
+						if (item.getType() == Material.AMETHYST_BLOCK && !item.equals(mruwiKlejnot)){
 							inv.setResult(null);
 						}
 					}

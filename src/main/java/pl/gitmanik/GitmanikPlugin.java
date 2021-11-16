@@ -163,7 +163,7 @@ public class GitmanikPlugin extends JavaPlugin {
     {
         if (config.getBoolean("customItems.enableBlogoslawienstwoNieumarlych"))
         {
-            ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.EMERALD, 1);
+            ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.RAW_COPPER, 1);
             ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
             blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
             blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
@@ -176,7 +176,7 @@ public class GitmanikPlugin extends JavaPlugin {
 
         if (config.getBoolean("customItems.enableMruwiKlejnot"))
         {
-            ItemStack mruwiKlejnot = new ItemStack(Material.LAPIS_BLOCK);
+            ItemStack mruwiKlejnot = new ItemStack(Material.AMETHYST_BLOCK);
             ItemMeta mruwiKlejnotMeta = mruwiKlejnot.getItemMeta();
             mruwiKlejnotMeta.setDisplayName("§6Mruwi Klejnot");
             mruwiKlejnot.setItemMeta(mruwiKlejnotMeta);
@@ -184,8 +184,8 @@ public class GitmanikPlugin extends JavaPlugin {
             customItems.put("mruwi_klejnot", mruwiKlejnot);
             ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), customItems.get("mruwi_klejnot"));
             mruwiKlejnotRecipe.shape("LLL", "LEL", "LLL");
-            mruwiKlejnotRecipe.setIngredient('L', Material.LAPIS_BLOCK);
-            mruwiKlejnotRecipe.setIngredient('E', Material.ENDER_EYE);
+            mruwiKlejnotRecipe.setIngredient('L', Material.AMETHYST_SHARD);
+            mruwiKlejnotRecipe.setIngredient('E', Material.NAUTILUS_SHELL);
             Bukkit.addRecipe(mruwiKlejnotRecipe);
         }
 
@@ -199,9 +199,8 @@ public class GitmanikPlugin extends JavaPlugin {
             customItems.put("mruwi_kilof", mruwiKilof);
 
             ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), customItems.get("mruwi_kilof"));
-            mruwiRecip.shape("LLL", "RKR", "RRR");
-            mruwiRecip.setIngredient('L', Material.LAPIS_BLOCK);
-            mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
+            mruwiRecip.shape("AAA", "AKA", "AAA");
+            mruwiRecip.setIngredient('A', Material.AMETHYST_BLOCK);
             mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
             Bukkit.addRecipe(mruwiRecip);
         }
