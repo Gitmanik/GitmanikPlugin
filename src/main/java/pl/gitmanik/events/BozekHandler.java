@@ -24,7 +24,7 @@ public class BozekHandler implements Listener
 	{
 		Player player = e.getEntity();
 
-		List<ItemStack> bozekFinder = Arrays.stream(player.getInventory().getContents()).filter(candidate -> (candidate != null && candidate.getType() == Material.EMERALD)).collect(Collectors.toList());
+		List<ItemStack> bozekFinder = Arrays.stream(player.getInventory().getContents()).filter(candidate -> (candidate != null && candidate.getType() == Material.RAW_COPPER)).collect(Collectors.toList());
 		for (ItemStack item : bozekFinder)
 		{
 			if (item.getEnchantmentLevel(przychylnosc) == 1 || item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 10)
