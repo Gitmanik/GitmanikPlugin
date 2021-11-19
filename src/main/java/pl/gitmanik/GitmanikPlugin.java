@@ -9,10 +9,10 @@ import org.bukkit.inventory.StonecuttingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.gitmanik.chatsystem.ChatSystem;
-import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.commands.Homesystem;
 import pl.gitmanik.commands.StackPotions;
 import pl.gitmanik.commands.Teleportsystem;
+import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
@@ -78,6 +78,11 @@ public class GitmanikPlugin extends JavaPlugin {
             GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
             GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
             GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+            GenerateCompressedItem(Material.DEEPSLATE, "§dSkompresowany Deepslate", "c_deepslate");
+            GenerateCompressedItem(Material.NETHERRACK, "§dSkompresowany Netherrack", "c_netherrack");
+            GenerateCompressedItem(Material.ANDESITE, "§dSkompresowany Andezyt", "c_andesite");
+            GenerateCompressedItem(Material.GRANITE, "§dSkompresowany Granit", "c_granite");
+            GenerateCompressedItem(Material.DIORITE, "§dSkompresowany Dioryt", "c_diorite");
         }
 
         try

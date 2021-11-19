@@ -30,7 +30,7 @@ public class DiamondSystem implements Listener
 		if (player.getGameMode() == GameMode.CREATIVE)
 			return;
 
-		if (block.getType() == Material.DIAMOND_ORE)
+		if (block.getType() == Material.DIAMOND_ORE || block.getType() == Material.DEEPSLATE_DIAMOND_ORE)
 		{
 			handleDiamondBlock(player, block);
 			event.setCancelled(true);
