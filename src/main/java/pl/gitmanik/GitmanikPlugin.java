@@ -83,6 +83,10 @@ public class GitmanikPlugin extends JavaPlugin {
             GenerateCompressedItem(Material.ANDESITE, "§dSkompresowany Andezyt", "c_andesite");
             GenerateCompressedItem(Material.GRANITE, "§dSkompresowany Granit", "c_granite");
             GenerateCompressedItem(Material.DIORITE, "§dSkompresowany Dioryt", "c_diorite");
+            GenerateCompressedItem(Material.GRAVEL, "§dSkompresowany Gravel", "c_gravel");
+            GenerateCompressedItem(Material.STONE, "§dSkompresowany Stone", "c_stone");
+            GenerateCompressedItem(Material.COAL_BLOCK, "§dSkompresowany Blok Wegla", "c_coalblock");
+            GenerateCompressedItem(Material.QUARTZ_BLOCK, "§dSkompresowany Blok Kwarcu", "c_quartzblock");
         }
 
         try
