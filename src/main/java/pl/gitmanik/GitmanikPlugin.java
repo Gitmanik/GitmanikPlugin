@@ -78,7 +78,7 @@ public class GitmanikPlugin extends JavaPlugin {
             GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
             GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
             GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
-            GenerateCompressedItem(Material.DEEPSLATE, "§dSkompresowany Deepslate", "c_deepslate");
+            GenerateCompressedItem(Material.COBBLED_DEEPSLATE, "§dSkompresowany Bruk Deepslate", "c_bdeepslate");
             GenerateCompressedItem(Material.NETHERRACK, "§dSkompresowany Netherrack", "c_netherrack");
             GenerateCompressedItem(Material.ANDESITE, "§dSkompresowany Andezyt", "c_andesite");
             GenerateCompressedItem(Material.GRANITE, "§dSkompresowany Granit", "c_granite");
