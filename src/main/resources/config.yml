@@ -1,0 +1,52 @@
+enableChainmailRecipes: true
+enableCobbleToGravelStonecutter: true
+enableCompressedItems: true
+#Material enum values like OBSIDIAN, BEDROCK
+allowed_TUNNELDIGGER_blockList: [STONE, DIORITE, ANDESITE, GRANITE]
+
+customItems:
+  enable: true
+  enableMruwiKlejnot: true
+  enableMruwiKilof: true
+  enableMagicznaOrchidea: true
+  enableBlogoslawienstwoNieumarlych: true
+  enableEnderowyDepozyt: true
+
+#USE ONLY FLOATED NUMBERS THERE
+#baseDiamondDrop chance fe. 0.5 = 50%
+#fortuneDiamondDrop is additional dropchance per fortune lvl added to (100%-baseDiamondDrop)
+#for example if baseDiamondDrop = 0.5 and fortuneDiamondDrop = 0.1
+#in this example fortune 3 pickaxe there is 80% dropchance of diamond
+diamondsystem:
+  enable: true
+  baseDropChance: 0.7
+  fortuneDropChance: 0.1
+
+blessingsystem:
+  drop: 0.1
+
+tunneldigger:
+  enable: true
+
+skipsystem:
+  enabled: true
+  chance: 0.7
+
+chatsystem:
+  enabled: true
+  range: 200
+
+homesystem:
+  enabled: true
+  material: DIAMOND
+  price: 3
+  delay: 30
+
+teleportsystem:
+  enabled: true
+  material: DIAMOND
+  price: 5
+  delay: 30
+
+stackpotion:
+  enabled: true

@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import pl.gitmanik.GitmanikPlugin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,12 @@ import java.util.stream.Collectors;
 
 public class StackPotions implements CommandExecutor
 {
+	private static String stackPotion = "p";
+
+	public StackPotions()
+	{
+		GitmanikPlugin.gp.getCommand(stackPotion).setExecutor(this);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)

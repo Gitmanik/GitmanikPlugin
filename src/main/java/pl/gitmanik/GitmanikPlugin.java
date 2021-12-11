@@ -1,23 +1,23 @@
 package pl.gitmanik;
 
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.gitmanik.commands.GPAdmin;
+import pl.gitmanik.chatsystem.ChatSystem;
 import pl.gitmanik.commands.Homesystem;
 import pl.gitmanik.commands.StackPotions;
 import pl.gitmanik.commands.Teleportsystem;
+import pl.gitmanik.commands.gpadmin.GPAdmin;
 import pl.gitmanik.enchants.EnchantmentHelper;
 import pl.gitmanik.enchants.GitmanikEnchantment;
 import pl.gitmanik.events.*;
-import pl.gitmanik.events.DeathHandler;
 import pl.gitmanik.helpers.GitmanikDurability;
 import pl.gitmanik.nightskip.NightSkipping;
-import pl.gitmanik.nightskip.VoteSkipNightHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,79 +25,90 @@ import java.util.Random;
 
 public class GitmanikPlugin extends JavaPlugin {
 
-    public static GitmanikPlugin gitmanikplugin;
-    public static ChatHandler chathandler;
+    public static GitmanikPlugin gp;
+    public static ChatSystem chathandler;
+    public GPAdmin GPAdmin;
 
     public static ArrayList<GitmanikEnchantment> customEnchantments = new ArrayList<>();
     public static HashMap<String, ItemStack> customItems = new HashMap<>();
 
     public static HashMap<String, ItemStack> compressedItems = new HashMap<>();
 
-
-    public static NightSkipping nightskipping = new NightSkipping();
+    public static NightSkipping nightskipping;
 
     public static Random rand = new Random();
 
+    private FileConfiguration config;
+
     @Override
     public void onEnable() {
-        gitmanikplugin = this;
+        gp = this;
+        this.saveDefaultConfig();
+        config = this.getConfig();
 
         RegisterCustomEnchants();
 
-        RegisterCommands();
-        GenerateCustomItemStacks();
+        GPAdmin = new GPAdmin();
 
-        GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
-        GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
-        GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+        if (config.getBoolean("skipsystem.enable"))
+        {
+            nightskipping = new NightSkipping();
+        }
+        if (config.getBoolean("chatsystem.enabled"))
+        {
+            chathandler = new ChatSystem();
+        }
+        if (config.getBoolean("stackpotions.enabled"))
+        {
+            StackPotions stackpotions = new StackPotions();
+        }
+        if (config.getBoolean("homesystem.enabled"))
+        {
+            Homesystem homesystem = new Homesystem();
+            Bukkit.getPluginManager().registerEvents(homesystem, this);
+        }
+        if (config.getBoolean("teleportsystem.enabled"))
+        {
+            Teleportsystem teleportsystem = new Teleportsystem();
+            Bukkit.getPluginManager().registerEvents(teleportsystem, this);
+        }
+
+        if (config.getBoolean("enableCompressedItems"))
+        {
+            GenerateCompressedItem(Material.COBBLESTONE, "§dSkompresowany Cobble", "c_cobble");
+            GenerateCompressedItem(Material.DIRT, "§dSkompresowana Ziemia", "c_dirt");
+            GenerateCompressedItem(Material.SAND, "§dSkompresowany Piasek", "c_sand");
+            GenerateCompressedItem(Material.COBBLED_DEEPSLATE, "§dSkompresowany Bruk Deepslate", "c_bdeepslate");
+            GenerateCompressedItem(Material.NETHERRACK, "§dSkompresowany Netherrack", "c_netherrack");
+            GenerateCompressedItem(Material.ANDESITE, "§dSkompresowany Andezyt", "c_andesite");
+            GenerateCompressedItem(Material.GRANITE, "§dSkompresowany Granit", "c_granite");
+            GenerateCompressedItem(Material.DIORITE, "§dSkompresowany Dioryt", "c_diorite");
+            GenerateCompressedItem(Material.GRAVEL, "§dSkompresowany Gravel", "c_gravel");
+            GenerateCompressedItem(Material.STONE, "§dSkompresowany Stone", "c_stone");
+            GenerateCompressedItem(Material.COAL_BLOCK, "§dSkompresowany Blok Wegla", "c_coalblock");
+            GenerateCompressedItem(Material.QUARTZ_BLOCK, "§dSkompresowany Blok Kwarcu", "c_quartzblock");
+        }
 
         try
         {
-            GenerateCustomRecipes();
-            GenerateChainmailRecipes();
+            if (config.getBoolean("customItems.enable"))
+                LoadCustomItems();
+
+            if (config.getBoolean("enableChainmailRecipes"))
+                GenerateChainmailRecipes();
         }
         catch (Exception ignored){}
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, nightskipping, 0L, 60L);
+        if (config.getBoolean("diamondsystem.enable"))
+            Bukkit.getPluginManager().registerEvents(new DiamondSystem(), this);
 
-        Bukkit.getPluginManager().registerEvents(new OreHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DeathHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new PlantHandler(), this);
-        Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
+        if (config.getBoolean("tunneldigger.enable"))
+            Bukkit.getPluginManager().registerEvents(new TunneldiggerHandler(), this);
+
         Bukkit.getPluginManager().registerEvents(new AnvilHandler(), this);
         Bukkit.getPluginManager().registerEvents(new CraftingHandler(), this);
 
-        chathandler = new ChatHandler(this);
-        Bukkit.getPluginManager().registerEvents(chathandler, this);
-
-
         getLogger().info("Running.");
-
-    }
-
-    private void RegisterCommands()
-    {
-        //Admin
-
-        GPAdmin a = new GPAdmin();
-        this.getCommand("gpadmin").setExecutor(a);
-        this.getCommand("gpadmin").setTabCompleter(a);
-
-
-        //QoL
-        this.getCommand("p").setExecutor(new StackPotions());
-
-        //Home system
-        Homesystem homesystem = new Homesystem();
-        this.getCommand("dom").setExecutor(homesystem);
-        this.getCommand("ustawdom").setExecutor(homesystem);
-
-        Teleportsystem teleportsystem = new Teleportsystem();
-        this.getCommand("gtpa").setExecutor(teleportsystem);
-        this.getCommand("gtpaccept").setExecutor(teleportsystem);
-
-        //Helper
-        this.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
 
     }
 
@@ -157,94 +168,96 @@ public class GitmanikPlugin extends JavaPlugin {
 
     }
 
-    private void GenerateCustomRecipes()
+    private void LoadCustomItems()
     {
-        //MRUWI KLEJNOT
-        ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), customItems.get("mruwi_klejnot"));
-        mruwiKlejnotRecipe.shape("LLL", "LEL", "LLL");
-        mruwiKlejnotRecipe.setIngredient('L', Material.LAPIS_BLOCK);
-        mruwiKlejnotRecipe.setIngredient('E', Material.ENDER_EYE);
-        Bukkit.addRecipe(mruwiKlejnotRecipe);
+        if (config.getBoolean("customItems.enableBlogoslawienstwoNieumarlych"))
+        {
+            ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.RAW_COPPER, 1);
+            ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
+            blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
+            blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
+            EnchantmentHelper.AddEnchantWithLore(blogoslawienstwoNieumarlych, EnchantmentHelper.GetEnchantment("przychylnosc"), 1);
+            customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
 
-        //MRUWI KILOF
-        ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), customItems.get("mruwi_kilof"));
-        mruwiRecip.shape("LLL", "RKR", "RRR");
-        mruwiRecip.setIngredient('L', Material.LAPIS_BLOCK);
-        mruwiRecip.setIngredient('R', Material.IRON_BLOCK);
-        mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
-        Bukkit.addRecipe(mruwiRecip);
+            Bukkit.getPluginManager().registerEvents(new BozekHandler(), this);
+        }
 
-        //MAGICZNA ORCHIDEA
-        ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), customItems.get("magiczna_orchidea"));
-        orchidearecipe.shape("LHL", "HOH", "LHL");
-        orchidearecipe.setIngredient('O', Material.BLUE_ORCHID);
-        orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
-        orchidearecipe.setIngredient('H', Material.IRON_HOE);
-        Bukkit.addRecipe(orchidearecipe);
 
-        //ENDEROWY DEPOZYT
-        ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "enderowy_depozyt"), customItems.get("enderowy_depozyt"));
-        depo.shape("PPP", "NGN", "NNN");
-        depo.setIngredient('P', Material.ENDER_PEARL);
-        depo.setIngredient('G', Material.GLOWSTONE_DUST);
-        depo.setIngredient('N', Material.NETHERRACK);
-        Bukkit.addRecipe(depo);
+        if (config.getBoolean("customItems.enableMruwiKlejnot"))
+        {
+            ItemStack mruwiKlejnot = new ItemStack(Material.AMETHYST_BLOCK);
+            ItemMeta mruwiKlejnotMeta = mruwiKlejnot.getItemMeta();
+            mruwiKlejnotMeta.setDisplayName("§6Mruwi Klejnot");
+            mruwiKlejnot.setItemMeta(mruwiKlejnotMeta);
+            mruwiKlejnot.addUnsafeEnchantment(Enchantment.LUCK, 10);
+            customItems.put("mruwi_klejnot", mruwiKlejnot);
+            ShapedRecipe mruwiKlejnotRecipe = new ShapedRecipe(new NamespacedKey(this, "mruwi_klejnot"), customItems.get("mruwi_klejnot"));
+            mruwiKlejnotRecipe.shape("LLL", "LEL", "LLL");
+            mruwiKlejnotRecipe.setIngredient('L', Material.AMETHYST_SHARD);
+            mruwiKlejnotRecipe.setIngredient('E', Material.NAUTILUS_SHELL);
+            Bukkit.addRecipe(mruwiKlejnotRecipe);
+        }
 
-        StonecuttingRecipe cobbleToGravel = new StonecuttingRecipe(new NamespacedKey(this, "cobble_gravel"), new ItemStack(Material.GRAVEL, 2), Material.COBBLESTONE);
-        Bukkit.addRecipe(cobbleToGravel);
-    }
+        if (config.getBoolean("customItems.enableMruwiKilof"))
+        {
+            ItemStack mruwiKilof = new ItemStack(Material.DIAMOND_PICKAXE);
+            ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
+            mruwiaMeta.setDisplayName("§dMruwi Kilof");
+            mruwiKilof.setItemMeta(mruwiaMeta);
+            EnchantmentHelper.AddEnchantWithLore(mruwiKilof, EnchantmentHelper.GetEnchantment("tunneldigger"), 1);
+            customItems.put("mruwi_kilof", mruwiKilof);
 
-    private void GenerateCustomItemStacks()
-    {
+            ShapedRecipe mruwiRecip = new ShapedRecipe(new NamespacedKey(this, "mruwi_kilof"), customItems.get("mruwi_kilof"));
+            mruwiRecip.shape("AAA", "AKA", "AAA");
+            mruwiRecip.setIngredient('A', Material.AMETHYST_BLOCK);
+            mruwiRecip.setIngredient('K', Material.DIAMOND_PICKAXE);
+            Bukkit.addRecipe(mruwiRecip);
+        }
 
-        //BOŻEK
-        ItemStack blogoslawienstwoNieumarlych = new ItemStack(Material.EMERALD, 1);
-        ItemMeta blogoslawienstwoNieumarlychMeta = blogoslawienstwoNieumarlych.getItemMeta();
-        blogoslawienstwoNieumarlychMeta.setDisplayName(ChatColor.GOLD + "Błogosławieństwo Nieumarłych");
-        blogoslawienstwoNieumarlych.setItemMeta(blogoslawienstwoNieumarlychMeta);
-        EnchantmentHelper.AddEnchantWithLore(blogoslawienstwoNieumarlych, EnchantmentHelper.GetEnchantment("przychylnosc"), 1);
-        customItems.put("blogoslawienstwo-nieumarlych", blogoslawienstwoNieumarlych);
-        //------------------------------
+        if (config.getBoolean("customItems.enableMagicznaOrchidea"))
+        {
+            ItemStack magicznaOrchidea = new ItemStack(Material.BLUE_ORCHID);
+            ItemMeta orchideaMeta = magicznaOrchidea.getItemMeta();
+            orchideaMeta.setDisplayName("§dMagiczna Orchidea");
+            magicznaOrchidea.setItemMeta(orchideaMeta);
+            EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, EnchantmentHelper.GetEnchantment("rekafarmera"), 1);
+            GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
+            customItems.put("magiczna_orchidea", magicznaOrchidea);
 
-        //MRUWI KLEJNOT
-        ItemStack mruwiKlejnot = new ItemStack(Material.LAPIS_BLOCK);
-        ItemMeta mruwiKlejnotMeta = mruwiKlejnot.getItemMeta();
-        mruwiKlejnotMeta.setDisplayName("§6Mruwi Klejnot");
-        mruwiKlejnot.setItemMeta(mruwiKlejnotMeta);
-        mruwiKlejnot.addUnsafeEnchantment(Enchantment.LUCK, 10);
-        customItems.put("mruwi_klejnot", mruwiKlejnot);
-        //------------------------------------
+            ShapedRecipe orchidearecipe = new ShapedRecipe(new NamespacedKey(this, "magiczna_orchidea"), customItems.get("magiczna_orchidea"));
+            orchidearecipe.shape("LHL", "HOH", "LHL");
+            orchidearecipe.setIngredient('O', Material.BLUE_ORCHID);
+            orchidearecipe.setIngredient('L', Material.LAPIS_BLOCK);
+            orchidearecipe.setIngredient('H', Material.IRON_HOE);
+            Bukkit.addRecipe(orchidearecipe);
 
-        //-------------------------------
-        ItemStack mruwiKilof = new ItemStack(Material.DIAMOND_PICKAXE);
-        ItemMeta mruwiaMeta = mruwiKilof.getItemMeta();
-        mruwiaMeta.setDisplayName("§dMruwi Kilof");
-        mruwiKilof.setItemMeta(mruwiaMeta);
-        EnchantmentHelper.AddEnchantWithLore(mruwiKilof, EnchantmentHelper.GetEnchantment("tunneldigger"), 1);
-        customItems.put("mruwi_kilof", mruwiKilof);
-        //-------------------------------------------
+            Bukkit.getPluginManager().registerEvents(new FarmersHandHandler(), this);
+        }
 
-        //KWIAT
-        ItemStack magicznaOrchidea = new ItemStack(Material.BLUE_ORCHID);
-        ItemMeta orchideaMeta = magicznaOrchidea.getItemMeta();
-        orchideaMeta.setDisplayName("§dMagiczna Orchidea");
-        magicznaOrchidea.setItemMeta(orchideaMeta);
-        EnchantmentHelper.AddEnchantWithLore(magicznaOrchidea, EnchantmentHelper.GetEnchantment("rekafarmera"), 1);
-        GitmanikDurability.SetDurability(magicznaOrchidea, 1000);
-        customItems.put("magiczna_orchidea", magicznaOrchidea);
- 
-        // ------------------------------------
+        if (config.getBoolean("customItems.enableEnderowyDepozyt"))
+        {
+            ItemStack mrocznyDepozyt = new ItemStack(Material.CRIMSON_FUNGUS);
+            ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
+            epozyt.setDisplayName("§dEnderowy Depozyt");
+            mrocznyDepozyt.setItemMeta(epozyt);
+            mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null??? zebys sie pytal smiedzelu
+            GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
+            customItems.put("enderowy_depozyt", mrocznyDepozyt);
 
-        //GRZYB
-        ItemStack mrocznyDepozyt = new ItemStack(Material.CRIMSON_FUNGUS);
-        ItemMeta epozyt = mrocznyDepozyt.getItemMeta();
-        epozyt.setDisplayName("§dEnderowy Depozyt");
-        mrocznyDepozyt.setItemMeta(epozyt);
-        mrocznyDepozyt.addEnchantment(EnchantmentHelper.GetEnchantment("depoenchant"), 1); //dlaczego might be null???
-        GitmanikDurability.SetDurability(mrocznyDepozyt, 25);
-        customItems.put("enderowy_depozyt", mrocznyDepozyt);
-        // -----------------------------------
+            ShapedRecipe depo = new ShapedRecipe(new NamespacedKey(this, "enderowy_depozyt"), customItems.get("enderowy_depozyt"));
+            depo.shape("PPP", "NGN", "NNN");
+            depo.setIngredient('P', Material.ENDER_PEARL);
+            depo.setIngredient('G', Material.GLOWSTONE_DUST);
+            depo.setIngredient('N', Material.NETHERRACK);
+            Bukkit.addRecipe(depo);
 
+            Bukkit.getPluginManager().registerEvents(new DepositHandler(), this);
+        }
+        if (config.getBoolean("enableCobbleToGravelStonecutter"))
+        {
+            StonecuttingRecipe cobbleToGravel = new StonecuttingRecipe(new NamespacedKey(this, "cobble_gravel"), new ItemStack(Material.GRAVEL, 2), Material.COBBLESTONE);
+            Bukkit.addRecipe(cobbleToGravel);
+        }
     }
 
     private void GenerateCompressedItem(Material material, String name, String key)

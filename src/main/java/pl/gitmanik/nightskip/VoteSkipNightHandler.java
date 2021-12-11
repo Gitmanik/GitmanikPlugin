@@ -20,7 +20,7 @@ public class VoteSkipNightHandler implements CommandExecutor
 		Player player = (Player) sender;
 		World world = player.getWorld();
 
-		if (GitmanikPlugin.gitmanikplugin.isDay(world) && GitmanikPlugin.nightskipping.allowSkip.getOrDefault(world, false))
+		if (GitmanikPlugin.gp.isDay(world) && GitmanikPlugin.nightskipping.allowSkip.getOrDefault(world, false))
 		{
 			int neededplayers = (int) Math.ceil(world.getPlayers().size() / 2.0);
 			if (GitmanikPlugin.nightskipping.nightSkipCount.get(world).contains(player))

@@ -1,8 +1,0 @@
-language: java
-deploy:
-  provider: releases
-  api_key: $TOKEN
-  file: "target/GitmanikPlugin-2.jar"
-  skip_cleanup: true
-  on:
-    tags: true

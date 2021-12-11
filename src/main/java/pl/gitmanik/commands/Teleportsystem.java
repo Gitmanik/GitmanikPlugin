@@ -7,22 +7,51 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import pl.gitmanik.GitmanikPlugin;
 
 import java.util.HashMap;
 
-public class Teleportsystem implements CommandExecutor
+public class Teleportsystem implements CommandExecutor, Listener
 {
-	public static final int KOSZT = 5;
+	private static int KOSZT, DELAY;
+	private static final String requestTelepost = "gtpa", acceptTeleport = "gtpaccept";
+	Material itemTeleportsystem = Material.valueOf(GitmanikPlugin.gp.getConfig().getString("teleportsystem.material"));
+
 	public HashMap<Player, Player> tpa = new HashMap<>();
-	public HashMap<Player, Integer> tasks = new HashMap<>();
+	public HashMap<Player, Integer> tpaExpiredRunnables = new HashMap<>();
+	public HashMap<Player, Integer> tpaDelayedTeleportationRunnables = new HashMap<>();
+
+	public Teleportsystem()
+	{
+		KOSZT = GitmanikPlugin.gp.getConfig().getInt("teleportsystem.price");
+		DELAY = GitmanikPlugin.gp.getConfig().getInt("teleportsystem.delay");
+		GitmanikPlugin.gp.getCommand("gtpa").setExecutor(this);
+		GitmanikPlugin.gp.getCommand("gtpaccept").setExecutor(this);
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onPlayerMove(PlayerMoveEvent event){
+		Player player = event.getPlayer();
+		if (tpaDelayedTeleportationRunnables.containsKey(player))
+		{
+			player.sendMessage(ChatColor.RED + "Ruszył*ś się, teleportacja odwołana!");
+			Bukkit.getScheduler().cancelTask(tpaDelayedTeleportationRunnables.get(player));
+			tpaDelayedTeleportationRunnables.remove(player);
+			Bukkit.getScheduler().cancelTask(tpaExpiredRunnables.get(player));
+			tpaExpiredRunnables.remove(player);
+		}
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
 		Player player = (Player) sender;
-		if (label.equalsIgnoreCase("gtpa"))
+		if (label.equalsIgnoreCase(requestTelepost))
 		{
 			if (args.length == 0)
 				return false;
@@ -31,7 +60,7 @@ public class Teleportsystem implements CommandExecutor
 
 			if (target == null)
 			{
-				player.sendMessage(ChatColor.RED + "Nie znaleziono gracza o nicku : " + args[0]);
+				player.sendMessage(String.format("%sNie znaleziono gracza o nicku: %s", ChatColor.RED, args[0]));
 				return true;
 			}
 
@@ -41,39 +70,38 @@ public class Teleportsystem implements CommandExecutor
 				return true;
 			}
 
-			if (!player.getInventory().contains(Material.DIAMOND, 5))
+			if (!player.getInventory().contains(itemTeleportsystem, KOSZT))
 			{
-				player.sendMessage(ChatColor.RED + "Nie stac cie na /gtpa! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
+				player.sendMessage(String.format("%s Nie stac cie na /%s! Koszt: %s diament(ów) (pobierany podczas teleportowania)", ChatColor.RED, requestTelepost, KOSZT));
 				return true;
 			}
 
 			tpa.put(target,player);
 
 			target.sendMessage(ChatColor.GOLD + player.getDisplayName() + ChatColor.WHITE + " chce się do ciebie teleportować.");
-			target.sendMessage(ChatColor.WHITE + "Aby zaakceptować wpisz " + ChatColor.GOLD + "/gtpaccept");
+			target.sendMessage(ChatColor.WHITE + "Aby zaakceptować wpisz " + ChatColor.GOLD + "/" + acceptTeleport);
 
 			sender.sendMessage(ChatColor.WHITE + "Wysłano prośbę do gracza " + ChatColor.GOLD + target.getDisplayName());
 
-			if (tasks.containsKey(player))
+			if (tpaExpiredRunnables.containsKey(player))
 			{
-				Bukkit.getScheduler().cancelTask(tasks.get(player));
-				tasks.remove(player);
+				Bukkit.getScheduler().cancelTask(tpaExpiredRunnables.get(player));
+				tpaExpiredRunnables.remove(player);
 			}
 
-			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gitmanikplugin, () ->
+			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gp, () ->
 			{
 				sender.sendMessage("Prośba przedawniona.");
 				tpa.remove(target);
-				tasks.remove(player);
+				tpaExpiredRunnables.remove(player);
 			}, 20*15);
 
-			tasks.put(player,x);
+			tpaExpiredRunnables.put(player,x);
 
 			return true;
-
 		}
 
-		if (label.equalsIgnoreCase("gtpaccept"))
+		if (label.equalsIgnoreCase(acceptTeleport))
 		{
 			if (!tpa.containsKey(player))
 			{
@@ -86,23 +114,32 @@ public class Teleportsystem implements CommandExecutor
 				player.sendMessage(ChatColor.RED + "Gracz jest już offline :(");
 				return true;
 			}
-			if (!base.getInventory().contains(Material.DIAMOND, 5))
+			if (!base.getInventory().contains(itemTeleportsystem, KOSZT))
 			{
-				base.sendMessage(ChatColor.RED + "Nie stac cie na /gtpa! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
+				base.sendMessage(ChatColor.RED + "Nie stac cie na /" + requestTelepost +"! Koszt: " + KOSZT + " diament (pobierany podczas teleportowania)");
 				player.sendMessage(ChatColor.RED + "Gracza nie było stać na teleportowanie się do Ciebie.");
 
 				return true;
 			}
-			base.teleport(player);
-			base.getInventory().removeItem(new ItemStack(Material.DIAMOND, KOSZT));
-			player.sendMessage(ChatColor.WHITE + "Przeteleportowano " + ChatColor.GOLD + base.getDisplayName() + ChatColor.WHITE + " do Ciebie.");
 
-			if (tasks.containsKey(base))
+			if (tpaExpiredRunnables.containsKey(base))
 			{
-				Bukkit.getScheduler().cancelTask(tasks.get(base));
-				tasks.remove(base);
+				Bukkit.getScheduler().cancelTask(tpaExpiredRunnables.get(base));
+				tpaExpiredRunnables.remove(base);
 			}
-			tpa.remove(player);
+			base.sendMessage(ChatColor.GOLD + "Teleportowanie w toku.. nie ruszaj się przez " + DELAY + "sekund!");
+
+			int x = Bukkit.getScheduler().scheduleSyncDelayedTask(GitmanikPlugin.gp, () ->
+			{
+				base.teleport(player);
+				base.getInventory().removeItem(new ItemStack(itemTeleportsystem, KOSZT));
+				player.sendMessage(ChatColor.GOLD + "Przeteleportowano " + ChatColor.GOLD + base.getDisplayName() + ChatColor.WHITE + " do Ciebie.");
+
+				tpaDelayedTeleportationRunnables.remove(base);
+				tpa.remove(player);
+
+			}, 20L *DELAY);
+			tpaDelayedTeleportationRunnables.put(base, x);
 			return true;
 		}
 

@@ -4,14 +4,14 @@
 
     <groupId>pl.gitmanik</groupId>
     <artifactId>GitmanikPlugin</artifactId>
-    <version>2</version>
+    <version>4</version>
     <packaging>jar</packaging>
 
-    <name>gtm</name>
+    <name>GitmanikPlugin</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
 
     <repositories>
@@ -23,9 +23,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -35,8 +35,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

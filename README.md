@@ -1,6 +1,6 @@
-# GitmanikPlugin [![Build Status](https://travis-ci.org/Gitmanik/GitmanikPlugin.svg?branch=master)](https://travis-ci.org/Gitmanik/GitmanikPlugin)
+# GitmanikPlugin
 
-GitmanikPlugin is a simple Minecraft plugin containing minor tweaks and additions to SMP.
+GitmanikPlugin is a simple Minecraft plugin containing minor tweaks and additions to SMP. Fully customizable from YAML!
 
 ## Installation
 
@@ -10,7 +10,7 @@ No additional libraries are required.
 
 ## Plugin content
 
-- Fortune enchantment system change: added percentage to drop diamonds (70% + 10% for Fortune level)
+- Fortune enchantment system change: added percentage to drop diamonds
 - Custom enchantments
 - Durability system
 - Custom items!

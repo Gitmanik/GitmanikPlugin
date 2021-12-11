@@ -13,6 +13,9 @@ import pl.gitmanik.GitmanikPlugin;
 
 public class CraftingHandler implements Listener
 {
+	ItemStack mruwiKilof = GitmanikPlugin.customItems.get("mruwi_kilof");
+	ItemStack mruwiKlejnot = GitmanikPlugin.customItems.get("mruwi_klejnot");
+
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onCrafted(CraftItemEvent e)
 	{
@@ -26,9 +29,6 @@ public class CraftingHandler implements Listener
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onCraft(PrepareItemCraftEvent event)
 	{
-		ItemStack mruwiKilof = GitmanikPlugin.customItems.get("mruwi_kilof");
-		ItemStack mruwiKlejnot = GitmanikPlugin.customItems.get("mruwi_klejnot");
-
 		CraftingInventory inv = event.getInventory();
 
 		ItemStack result = inv.getResult();
@@ -41,7 +41,7 @@ public class CraftingHandler implements Listener
 				if (result.equals(mruwiKilof))
 				{
 					for(ItemStack item : inv.getMatrix()){
-						if (item != null && item.getType() == Material.LAPIS_BLOCK && !item.equals(mruwiKlejnot)){
+						if (item.getType() == Material.AMETHYST_BLOCK && !item.equals(mruwiKlejnot)){
 							inv.setResult(null);
 						}
 					}

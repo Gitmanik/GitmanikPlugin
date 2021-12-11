@@ -16,13 +16,15 @@ import java.util.Map;
 
 public class AnvilHandler implements Listener
 {
+	private final Enchantment tunnelDigger = EnchantmentHelper.GetEnchantment("tunneldigger");
+
 	@EventHandler
 	public void onAnvil(PrepareAnvilEvent e) {
 		AnvilInventory ai = e.getInventory();
 		ItemStack firstItem = ai.getFirstItem();
 		ItemStack secondItem = ai.getSecondItem();
 		if(firstItem != null) {
-			if(firstItem.containsEnchantment(EnchantmentHelper.GetEnchantment("tunneldigger"))) {
+			if(firstItem.containsEnchantment(tunnelDigger)) {
 				ItemStack item = firstItem.clone();
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName("§d" + ai.getRenameText());

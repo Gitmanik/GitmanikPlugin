@@ -17,6 +17,15 @@ public class NightSkipping implements Runnable
 	public HashMap<World, Boolean> allowSkip = new HashMap<>();
 	public HashMap<World, Boolean> asked = new HashMap<>();
 
+	private double chance;
+
+	public NightSkipping()
+	{
+		chance = GitmanikPlugin.gp.getConfig().getDouble("skipsystem.chance");
+		GitmanikPlugin.gp.getCommand("gtmvoteskipnight").setExecutor(new VoteSkipNightHandler());
+		GitmanikPlugin.gp.getServer().getScheduler().scheduleSyncRepeatingTask(GitmanikPlugin.gp, this, 0L, 60L);
+	}
+
 	@Override
 	public void run()
 	{
@@ -25,12 +34,12 @@ public class NightSkipping implements Runnable
 			if (!asked.containsKey(w))
 				asked.put(w, false);
 
-			if (!GitmanikPlugin.gitmanikplugin.isDay(w))
+			if (!GitmanikPlugin.gp.isDay(w))
 			{
 				if (!asked.get(w))
 				{
 					asked.put(w, true);
-					if (Math.random() < 0.7)
+					if (Math.random() < chance)
 					{
 						nightSkipCount.put(w, new HashSet<>());
 
