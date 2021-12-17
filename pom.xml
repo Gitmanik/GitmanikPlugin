@@ -4,15 +4,10 @@
 
     <groupId>pl.gitmanik</groupId>
     <artifactId>GitmanikPlugin</artifactId>
-    <version>4</version>
+    <version>5</version>
     <packaging>jar</packaging>
 
     <name>GitmanikPlugin</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
-    </properties>
 
     <repositories>
         <repository>
@@ -25,7 +20,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
